@@ -1,0 +1,58 @@
+{% extends 'dashboard/dashboard.html' %}
+{% block title %}Profile{% endblock title %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<br>
+<div class="container login">
+    <div class="row">
+      <h3 class="text-center">{{profile.name}}</h3>
+
+      <div class="col-md-3 offset-md-1">
+        <br>
+        <br>
+        {% if  profile.photo %}
+        <img src="{{ profile.photo.url }}" alt="Avatar" class="profilephoto">
+        {% endif %}
+      </div>
+
+
+      
+        <div class="col-md-4 offset-md-1">
+
+          
+           
+            <hr>
+            <h6>Name: {{profile.name}}</h6>
+            <hr>
+            <h6>Designation: {{profile.designation}}</h6>
+            <hr>
+            <h6>Qualification: {{profile.qualification}}</h6>
+            <hr>
+            <h6>Membership Number: {{profile.membership_number}}</h6>
+            <hr>
+            <h6>Bar Assosciation: {{profile.bar_assosciation}}</h6>
+            <hr>
+            <h6>Date of birth: {{profile.date_of_birth}} </h6>
+            <hr>
+            <h6>Gender: {{profile.gender}}</h6>
+            <hr>
+            <h6>Chamber Address: {{profile.chamber_address}}</h6>
+            <hr>
+            <h6>Email: {{profile.email}}</h6>
+            <hr>
+            <h6>Phone: {{profile.phone}}</h6>
+            <hr>
+
+        </div>
+        <div class="col-md-2">
+          
+        <a href="{% url 'profile_update' request.user.id %}" class="btn btn-primary"> Edit Profile</a>
+        </div>
+        
+        
+    </div>
+</div>
+
+
+{% endblock content %}

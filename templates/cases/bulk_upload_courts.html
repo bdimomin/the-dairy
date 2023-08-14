@@ -1,0 +1,27 @@
+{% extends 'dashboard/dashboard.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+  <br>
+  <div class="container">
+    <div class="row">
+        <div class="col-md-8 offset-md-2">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h3 class="text-center alert alert-primary" role="alert">Bulk Upload Courts</h3>
+                    <form method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {{ bulk_form.file | as_crispy_field }}
+                        <br>
+                        <div class="row">
+                            <div class="col-md-3 offset-md-5">
+                                <button type="submit" class="btn btn-success">Upload</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+  </div>
+
+{% endblock %}

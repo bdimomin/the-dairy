@@ -1,0 +1,68 @@
+{% extends 'dashboard/dashboard.html' %}
+
+{% block content %}
+<br>
+
+      <div class="card mb-4 ml-4 mr-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            All Clients
+            <div class="float-end">
+              <a href="{% url 'add-client' %}" class="btn btn-primary">Add Client</a>
+              <a href="{% url 'bulk_upload_clients' %}" class="btn btn-success">Bulk Add</a>
+            </div>
+        </div>
+        <div class="card-body">
+          {% if clients %}
+            <table id="datatablesSimple">
+                <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Branch</th>
+                      <th>File Number</th>
+                      <th>Representative</th>
+                      <th>Mobile</th>
+                      <th>Additional Mobile</th>
+                      <th>email</th>
+                      <th>Address</th>
+                      <th>Short Note</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                      <th>Name</th>
+                      <th>Branch</th>
+                      <th>File Number</th>
+                      <th>Representative</th>
+                      <th>Mobile</th>
+                      <th>Additional Mobile</th>
+                      <th>email</th>
+                      <th>Address</th>
+                      <th>Short Note</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                  {% for client in clients %}
+                  <tr>
+            
+                            <td>{{ client.name }}</td>
+                            <td>{{ client.branch }}</td>
+                            <td>{{ client.chamber_file_number }}</td>
+                            <td>{{ client.representative }}</td>
+                            <td>{{ client.mobile }}</td>
+                            <td>{{ client.additional_mobile }}</td>
+                            <td>{{ client.email }}</td>
+                            <td>{{ client.address }}</td>
+                            <td>{{ client.short_note }}</td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+            </table>
+        </div>
+      </div>
+      {% endif %}
+      
+
+{% endblock %}
+
+

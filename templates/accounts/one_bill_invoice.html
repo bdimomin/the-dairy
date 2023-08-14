@@ -1,0 +1,82 @@
+
+
+
+{% extends 'dashboard/dashboard.html' %}
+{% block title %}Bill Invoices | Dashboard {% endblock title %} 
+{% load crispy_forms_tags %}
+
+{% block content %}
+<br>
+<br>
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <div class="card shadow">
+                <div class="card-body">
+            <div class="header">
+                <nav class="navbar navbar-expand-sm bg-info">
+  
+                    <ul class="navbar-nav ml-auto">
+                        
+                        <li class="nav-item">
+                            <a class="nav-link btn btn-danger" href="{% url 'BillInvoicePDF' bill_invoice.id %}" target="_blank"> <i class="fa fa-print" aria-hidden="true"></i>
+                              Print
+                            </a>
+                        </li>
+                       
+                    </ul>
+                </nav>
+            </div>
+            <br>
+            <br>
+
+            <h6>To,</h6>
+            <strong>{{ bill_invoice.client }}</strong>
+            <p>{{ bill_invoice.address }}</p>
+            <br>
+            <br>
+            <h6>Subject: {{bill_invoice.subjects}}</h6>
+            <br>
+            <br>
+
+            <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th scope="col">SL.</th>
+                    <th scope="col" colspan="2">Descriptions</th>
+                    <th scope="col" colspan="2">Amount</th>
+                   
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">1</th>
+                    <td colspan="2">{{bill_invoice.description}}</td>
+                    <td>Total </td>
+                    <td>{{bill_invoice.amount|add:bill_invoice.vat}}</td>
+                  </tr>
+                  <tr>
+                    <td colspan="5"> In word: {{ word }} taka only</td>
+                  </tr>
+                 
+                </tbody>
+              </table>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+

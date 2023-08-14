@@ -1,0 +1,95 @@
+
+{% extends 'dashboard/dashboard.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<br>
+          
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+              <div class="modal-content">
+                
+                <div class="container">
+                    <div class="row">
+                      <div class="col-md-8 offset-md-2">
+                            <br>
+                            <h3 class="text-center alert alert-primary" role="alert">Create Station</h3>
+                            <form method="post">
+                              {% csrf_token %}
+                  
+                              <div class="row">
+                                <div class="col-md-8">{{form.station|as_crispy_field}}</div>
+                              </div>
+                              <div class="row">
+                                <div class="col-md-2 offset-md-3"><button type="submit" class="btn btn-primary">Create</button></div>
+                              </div>
+                              <br>
+                  
+                            </form>
+                          </div>
+                        </div>
+                  </div>
+              </div>
+            </div>
+</div>
+
+          <br>
+
+
+    <div class="card mb-4 ml-4 mr-4">
+              <div class="card-header">
+                <i class="fas fa-table me-1"></i>
+                Police Stations
+                <div class="float-end">
+                  <a type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Create</a>
+                  <a href="{% url 'bulk_upload_stations' %}" class="btn btn-success">Bulk Upload</a>
+                </div>
+              </div>
+              {% if stations %}
+              <div class="card-body">
+                <table id="datatablesSimple">
+                  <thead>
+                    <tr>
+                      <th>Police Station</th>
+                      <th>Edit</th>
+                    </tr>
+                  </thead>
+                  <tfoot>
+                    <tr>
+                      <th>Police Station</th>
+                      <th>Edit</th>
+                    </tr>
+                  </tfoot>
+                  <tbody>
+                    {% for single_station in stations %}
+                      <tr>
+                        <td>{{ single_station.station }}</td>
+                        <td>
+                          <a href="/stations/{{ single_station.id }}" type="button" class="btn btn-info" data-toggle="modal" data-target=".bd-example-modal-lg">Edit</a>
+                        </td>
+                      </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+              </div>
+    </div>
+  {% else %}
+    <h3 class="text-center alert alert-primary" role="alert">Currently, You don't have any Stations</h3>
+  {% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
+{% endblock %}

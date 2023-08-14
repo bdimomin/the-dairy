@@ -1,0 +1,69 @@
+{% extends 'dashboard/dashboard.html' %}
+
+{% block content %}
+  <h2 class="text-center">Running Cases</h2>
+  <div class="card mb-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        Running Cases
+    </div>
+    <div class="card-body">
+        {% if running_cases %}
+        <table id="datatablesSimple">
+            <thead>
+                <tr>
+                    <th>Case Type</th>
+                    <th>Court</th>
+                    <th>Date</th>
+                    <th>First Party</th>
+                    <th>Appointed By</th>
+                    <th>Law and Section</th>
+                    <th>Case No</th>
+                    <th>Police Station</th>
+                    <th>Fixed For</th>
+                    <th>Second Party</th>
+                    <th>Mobile No.</th>
+                    <th>Comments</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                    <th>Case Type</th>
+                    <th>Court</th>
+                    <th>Date</th>
+                    <th>First Party</th>
+                    <th>Appointed By</th>
+                    <th>Law and Section</th>
+                    <th>Case No</th>
+                    <th>Police Station</th>
+                    <th>Fixed For</th>
+                    <th>Second Party</th>
+                    <th>Mobile No.</th>
+                    <th>Comments</th>
+                </tr>
+            </tfoot>
+            <tbody>
+                {% for case in running_cases %}
+                <tr>
+                    <td>{{ case.case_type }}</td>
+                    <td>{{ case.court }}</td>
+                    <td>{{ case.date }}</td>
+                    <td>{{ case.first_party }}</td>
+                    <td>{{ case.appointed_by }}</td>
+                    <td>{{ case.law_and_section }}</td>
+                    <td>{{ case.case_no }}</td>
+                    <td>{{ case.police_station }}</td>
+                    <td>{{ case.fixed_for }}</td>
+                    <td>{{ case.second_party }}</td>
+                    <td>{{ case.mobile_no }}</td>
+                    <td>{{ case.comments }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<h3 class="text-center alert alert-primary" role="alert">Currently, You don't have any cases</h3>
+{% endif %}
+{% endblock %}

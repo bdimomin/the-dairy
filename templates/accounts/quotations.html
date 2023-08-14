@@ -1,0 +1,124 @@
+
+
+
+{% extends 'dashboard/dashboard.html' %}
+{% block title %}Quotations | Dashboard {% endblock title %} 
+{% load crispy_forms_tags %}
+
+{% block content %}
+<br>
+
+{% if quotations %}
+<div class="card mb-4 ml-4 mr-4">
+    <div class="card-header">
+        <i class="fas fa-table me-1"></i>
+        Quotations
+    </div>
+    <div class="card-body">
+        <table id="datatablesSimple">
+            <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Invoice To</th>
+                  <th>subjects</th>
+                  <th>Total</th>
+                </tr>
+            </thead>
+            <tfoot>
+                <tr>
+                  <th>Date</th>
+                  <th>Invoice To</th>
+                  <th>subjects</th>
+                  <th>Total</th>
+                </tr>
+            </tfoot>
+            <tbody>
+              {% for quotation in quotations %}
+              <tr>
+        
+                        <td><a href="{% url 'oneQuotation' quotation.id %}">{{ quotation.date }}</a></td>
+                        <td><a href="{% url 'oneQuotation' quotation.id %}">{{ quotation.client }}</a></td>
+                        <td><a href="{% url 'oneQuotation' quotation.id %}">{{ quotation.subjects }}</a></td>
+                        {% if  quotation.vat%}
+                        <td><a href="{% url 'oneQuotation' quotation.id %}">{{ quotation.amount|add:quotation.vat }}</a></td>
+                        {% else %}
+                        <td><a href="{% url 'oneQuotation' quotation.id %}">{{ quotation.amount }}</a></td>
+                        {% endif %}
+              </tr>
+              {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% else %}
+<h3 class="text-center alert alert-primary" role="alert">Currently, You don't have any Quotations</h3>
+{% endif %}
+
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-3  ml-3"><button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Create Quotations</button></div>
+  </div>
+</div>
+
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      
+     <div class="container">
+      <div class="row">
+        <div class="col-md-10 offset-md-1"> 
+          <br>
+          <form method="post">
+                
+            {% csrf_token %}
+    
+            <div class="row">
+              <div class="col-md-12">{{ form.client|as_crispy_field }}</div>
+             
+            </div>
+            <div class="row">
+              <div class="col-md-12">{{ form.address|as_crispy_field }}</div>
+             
+            </div>
+            <div class="row">
+              <div class="col-md-12">{{ form.subjects|as_crispy_field }}</div>
+             
+            </div>
+            <div class="row">
+                <div class="col-md-12">{{ form.description|as_crispy_field }}</div>
+           
+            </div>
+            <div class="row">
+                <div class="col-md-6">{{ form.amount|as_crispy_field }}</div>
+                <div class="col-md-6">{{ form.vat|as_crispy_field }}</div>
+             
+            </div>
+    
+            <br>
+            <div class="row">
+              <div class="col-md-3 offset-md-4"> <button type="submit" class="btn btn-primary">Save Invoice</button></div>
+            </div>
+           
+          </form>
+          <br>
+    
+        </div>
+      </div>
+     </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock %}
+
+
+
+
+
+
+
+
+

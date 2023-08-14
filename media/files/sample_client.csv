@@ -1,0 +1,4 @@
+name,branch,chamber_file_number,Representative,mobile,additional_mobile,email,address,short_note
+John Doe,Finance,1234,John Smith,555-1234,555-5678,john.doe@example.com,123 Main St,New client
+Jane Smith,HR,5678,Jane Johnson,444-5678,,jane.smith@example.com,456 Maple Ave,Interested in training services
+Michael Johnson,IT,9876,Michael Brown,777-9876,,michael.johnson@example.com,789 Oak St,

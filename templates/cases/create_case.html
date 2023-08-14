@@ -1,0 +1,76 @@
+{% extends 'dashboard/dashboard.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block content %}
+<br>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="card shadow">
+          <div class="card-body">
+            <h3 class="text-center alert alert-primary" role="alert">Create Case</h3>
+            {% if form.errors %}
+              <div class="alert alert-danger" role="alert">
+                <strong>Form Errors:</strong>
+                <ul>
+                  {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                      <li>{{ field|capfirst }}: {{ error }}</li>
+                    {% endfor %}
+                  {% endfor %}
+                </ul>
+              </div>
+            {% endif %}
+
+            <form method="post">
+              {% csrf_token %}
+
+          <div class="row">
+            <div class="col-md-6">{{form.case_type|as_crispy_field }}</div>
+            <div class="col-md-6">{{form.court|as_crispy_field }}</div>
+          </div>
+          <div class="row">
+            <div class="col-md-6">{{form.date|as_crispy_field }}</div>
+            <div class="col-md-6">{{form.mobile_no|as_crispy_field}}</div>
+          </div>
+
+              <div class="row">
+                <div class="col-md-6">{{form.first_party|as_crispy_field }}</div>
+                <div class="col-md-6">{{form.second_party|as_crispy_field }}</div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">{{form.appointed_by|as_crispy_field}}</div>
+                <div class="col-md-6">{{form.law_and_section|as_crispy_field}}</div>
+              </div>
+              <div class="row">
+                
+              </div>
+              <div class="row">
+                <div class="col-md-6">{{form.case_no|as_crispy_field}}</div>
+                <div class="col-md-6">{{form.police_station|as_crispy_field}}</div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">{{form.fixed_for|as_crispy_field}}</div>
+                <div class="col-md-6">{{form.comments|as_crispy_field}}</div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">{{form.status|as_crispy_field}}</div>
+                <div class="col-md-6">{{form.updated|as_crispy_field}}</div>
+              </div>
+              <div class="row">
+              
+              </div>
+              <br>
+              <div class="row">
+                <div class="col-md-4"></div>
+                <div class="col-md-4"><button type="submit" class="btn btn-outline-primary btn-lg">Create</button></div>
+                <div class="col-md-4"></div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

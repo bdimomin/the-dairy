@@ -1,0 +1,35 @@
+{% extends 'dashboard/dashboard.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<br>
+<br>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="card shadow">
+          <div class="card-body">
+            <h3 class="text-center alert alert-primary" role="alert">Entry Transaction</h3>
+              <form method="post">
+                
+                {% csrf_token %}
+
+                <div class="row">
+                  <div class="col-md-12">
+                    {{ form|crispy }}
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-2 offset-md-5">
+                    <button type="submit" class="btn btn-primary btn-block">Save</button>
+                  </div>
+                </div>
+               
+              </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

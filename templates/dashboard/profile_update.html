@@ -1,0 +1,57 @@
+{% extends 'dashboard/dashboard.html' %}
+{% block title %}Profile{% endblock title %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<br>
+<br>
+
+<div class="container login">
+    <div class="row">
+        <div class="col-md-10 offset-md-1">
+            <h3 class="text-center">Profile Update</h3>
+                
+            <form method="POST"  enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row">
+                    <div class="col-md-6">{{form.name|as_crispy_field}} </div>
+                    <div class="col-md-6">{{form.email|as_crispy_field}}</div>
+                    
+                </div>
+                <div class="row">
+                    <div class="col-md-6">{{form.phone|as_crispy_field}}</div>
+                    <div class="col-md-6">{{form.designation|as_crispy_field}}</div>
+                    <div class="col-md-6">{{form.qualification|as_crispy_field}}</div>
+                    <div class="col-md-6">{{form.membership_number|as_crispy_field}}</div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">{{form.bar_assosciation|as_crispy_field}}</div>
+                    <div class="col-md-6">{{form.date_of_birth|as_crispy_field}}</div>
+                    
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">{{form.gender|as_crispy_field}}</div>
+                    <div class="col-md-6">{{form.chamber_address|as_crispy_field}}</div>
+                    <div class="col-md-6">{{form.photo|as_crispy_field}}</div>
+    
+                </div>
+                
+                <br>
+                <div class="row">
+                    <div class="col-md-4"></div>
+                    <div class="col-md-4"><button type="submit" class="btn btn-success btn-block btn-lg">Update Profile</button> </div>
+                    
+                </div>
+
+                
+            </form>
+
+        </div>
+    </div>
+</div>
+
+ 
+
+{% endblock content %}
