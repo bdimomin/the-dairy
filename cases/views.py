@@ -15,14 +15,15 @@ def casetype_setup(request):
     if request.method == 'POST':
         form = CaseTypeForm(request.POST)
         if form.is_valid():
+            form.instance.user_id= request.user.id
             form.save()
             return redirect('case-type')
     else:
         form = CaseTypeForm()
+        user = request.user.id
+    casetypes = CaseType.objects.filter(user=user)
 
-    casetypes = CaseType.objects.all()
-
-    return render(request, 'cases/case_type.html',{'form':form, 'casetypes': casetypes})
+    return render(request, 'cases/case_type.html',{'form':form, 'casetypes': casetypes,})
 
 def bulk_upload_casetype(request):
     if request.method == 'POST':
@@ -63,19 +64,21 @@ def casetype_update(request, id):
     else:
         casetypeupdate = CaseTypeForm(instance =casetype)
 
-    casetypes = CaseType.objects.all()
+    user = request.user.id
+    casetypes = CaseType.objects.filter(user=user)
     return render(request, 'cases/case_type.html', {'casetypeupdate': casetypeupdate, 'casetypes': casetypes})
 
 def court_setup(request):
     if request.method == 'POST':
         form = CourtForm(request.POST)
         if form.is_valid():
+            form.instance.user_id= request.user.id
             form.save()
             return redirect('courts')
     else:
         form = CourtForm()
-
-    courts = Court.objects.all()
+        user = request.user.id
+    courts = Court.objects.filter(user=user)
 
     return render(request, 'cases/courts.html',{'form':form, 'courts': courts})
 
@@ -119,7 +122,8 @@ def court_update(request, court_id):
     else:
         form = CourtForm(instance=court)
 
-    courts = Court.objects.all()
+    user = request.user.id
+    courts = Court.objects.filter(user=user)
 
     return render(request, 'cases/courts.html',{'form':form, 'courts': courts})
 
@@ -129,11 +133,13 @@ def police_station_setup(request):
     if request.method == 'POST':
         form = PoliceStationForm(request.POST)
         if form.is_valid():
+            form.instance.user_id= request.user.id
             form.save()
             return redirect('stations')
     else:
         form = PoliceStationForm()
-    stations = PoliceStation.objects.all()
+        user = request.user.id
+    stations = PoliceStation.objects.filter(user=user)
     return render(request, 'cases/police_stations.html',{'form':form, 'stations': stations})
 
 def bulk_upload_police_stations(request):
@@ -175,7 +181,8 @@ def police_station_update(request, station_id):
     else:
         form = PoliceStationForm(instance=station)
 
-    stations = PoliceStation.objects.all()
+    user = request.user.id
+    stations = PoliceStation.objects.filter(user=user)
     return render(request, 'cases/police_stations.html',{'form':form, 'stations': stations})
 
 def getAllCases(request):

@@ -25,11 +25,13 @@ from . forms import TransactionForm, BillInvoicesForm, QuotationsForm
 
 
 def get_statements(request):
-    statements = Transaction.objects.all()
+    user = request.user.id
+    statements = Transaction.objects.filter(user=user)
     
     if request.method == 'POST':
         form = TransactionForm(request.POST)
         if form.is_valid():
+            form.instance.user = request.user
             form.save()
             return redirect('statements')
     else:
@@ -42,11 +44,13 @@ def get_statements(request):
 
 
 def bill_invoices(request):
-    bill_invoices = BillInvoices.objects.all()
+    user = request.user.id
+    bill_invoices = BillInvoices.objects.filter(user=user)
     form = BillInvoicesForm()
     if request.method == 'POST':
         form=BillInvoicesForm(request.POST)
         if form.is_valid():
+            form.instance.user = request.user
             form.save()
     return render(request,'accounts/bill_invoices.html',{'bill_invoices':bill_invoices,'form':form})
 
@@ -86,23 +90,27 @@ def billinvoicePDF(request, *args, **kwargs):
 
 
 def due_bills(request):
-    due_bills = BillInvoices.objects.filter(is_paid=0)
+    user = request.user.id
+    due_bills = BillInvoices.objects.filter(user=user,is_paid=0)
     return render(request,'accounts/due.html',{'due_bills':due_bills})
 
 
 def paid_due_bills(request,pk):
-    due_bills = BillInvoices.objects.filter(is_paid=0)
+    user = request.user.id
+    due_bills = BillInvoices.objects.filter(user=user, is_paid=0)
     bills = BillInvoices.objects.get(pk=pk)
     bills.is_paid = True
     bills.save()
     return render(request,'accounts/due.html',{'due_bills':due_bills})
 
 def quotations(request):
-    quotations = Quotations.objects.all()
+    user = request.user.id
+    quotations = Quotations.objects.filter(user=user)
     form = QuotationsForm()
     if request.method == 'POST':
         form=QuotationsForm(request.POST)
         if form.is_valid():
+            form.instance.user = request.user
             form.save()
     return render(request,'accounts/quotations.html',{'quotations':quotations,'form':form})
 
