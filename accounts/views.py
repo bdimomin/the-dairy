@@ -4,9 +4,11 @@ from django.http import HttpResponse
 from django.template.loader import get_template
 from xhtml2pdf import pisa
 from datetime import date
+from django.db.models import Sum
+import itertools
 from num2words import num2words
-from . models import Transaction, BillInvoices, Quotations
-from . forms import TransactionForm, BillInvoicesForm, QuotationsForm
+from . models import Transaction, BillInvoices, Quotations,IncomeStatements,ExpenseStatements,DueStatements, VatStatements
+from . forms import TransactionForm, BillInvoicesForm, QuotationsForm, IncomeStatementsForm,ExpenseStatementsForm,DueStatementsForm, VatStatementsForm
 
 
 # Create your views here.
@@ -145,3 +147,37 @@ def quotationPdf(request, *args, **kwargs):
     if pisa_status.err:
        return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
+
+
+def incomestatemts(request):  
+    user = request.user.id
+    income = IncomeStatements.objects.filter(user=user)
+    form = IncomeStatementsForm()
+    if request.method =='POST':
+        form = IncomeStatementsForm(request.POST)
+        if form.is_valid():
+            form.instance.user = request.user
+            form.save()
+    return render(request,'accounts/incomestatements.html', {'form':form,'income':income})
+
+def expensestatements(request):  
+    user = request.user.id
+    expense = ExpenseStatements.objects.filter(user=user)
+    form = ExpenseStatementsForm()
+    if request.method =='POST':
+        form = ExpenseStatementsForm(request.POST)
+        if form.is_valid():
+            form.instance.user = request.user
+            form.save()
+    return render(request,'accounts/expensestatements.html', {'form':form,'expense':expense})
+
+
+def balancestatements(request):  
+    user = request.user.id
+    income = IncomeStatements.objects.filter(user=user)
+    sumincome = IncomeStatements.objects.filter(user=user).aggregate(sumincome=Sum('amount'))
+    expense = ExpenseStatements.objects.filter(user=user)
+    sumexpense = ExpenseStatements.objects.filter(user=user).aggregate(sumexpense=Sum('amount'))
+    netbalance= sumincome["sumincome"]-sumexpense["sumexpense"]
+    balance = itertools.zip_longest(income, expense)
+    return render(request,'accounts/balancestatements.html', {'balance':balance,'netbalance':netbalance})

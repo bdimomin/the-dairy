@@ -62,11 +62,11 @@
                   </a>
                   <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                       <nav class="sb-sidenav-menu-nested nav">
-                          <a class="nav-link" href="#">Income Statements</a>
-                          <a class="nav-link" href="#">Expense Statements</a>
+                          <a class="nav-link" href="{% url 'incomestatements' %}">Income Statements</a>
+                          <a class="nav-link" href="{% url 'expensestatments' %}">Expense Statements</a>
                           <a class="nav-link" href="#">Dues Statements</a>
                           <a class="nav-link" href="#">VAT Statements</a>
-                          <a class="nav-link" href="#">Balance Statements</a>
+                          <a class="nav-link" href="{% url 'balancestatements' %}">Balance Statements</a>
                       </nav>
                   </div>
   

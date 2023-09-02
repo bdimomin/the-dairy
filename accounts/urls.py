@@ -13,4 +13,8 @@ urlpatterns = [
     path('quotations/',views.quotations,name="quotations"),
     path('quotation/<int:pk>/',views.oneQuotation,name="oneQuotation"),
     path('genquopdf/<int:pk>/',views.quotationPdf,name="QuotationPDF"),
+    
+    path('income/', views.incomestatemts, name="incomestatements"),
+    path('expense/', views.expensestatements, name="expensestatments"),
+    path('balance/', views.balancestatements, name="balancestatements"),
 ]
