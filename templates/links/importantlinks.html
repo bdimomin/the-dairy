@@ -1,0 +1,44 @@
+{% extends 'dashboard/dashboard.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<br>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="card shadow">
+          <div class="card-header text-center">
+           
+           Important Links
+           
+        </div>
+          <div class="card-body">
+            <div class="row">
+              <div class="col-md-12 col-sm-12">
+              <a href="{% url 'barcouncil' %}" class="btn btn-info text-light text-left btn-lg btn-block btn-huge border border-white rounded">Bangladesh Bar Council</a>
+              </div>
+              <div class="col-md-12 col-sm-12">
+              <a href="{% url 'dhakabarassociation' %}" class="btn btn-info text-light text-left btn-lg btn-block btn-huge border border-white rounded">Dhaka Bar Association</a>
+              </div>
+              <div class="col-md-12 col-sm-12">
+              <a href="{% url 'dhakataxbarassociation' %}" class="btn btn-info text-light text-left btn-lg btn-block btn-huge border border-white rounded">Dhaka Tax Bar Association</a>
+              </div>
+              <div class="col-md-12 col-sm-12">
+              <a href="{% url 'lawsofbd' %}" class="btn btn-info text-light text-left btn-lg btn-block btn-huge border border-white rounded">Laws of Bangladesh</a>
+              </div>
+              <div class="col-md-12 col-sm-12">
+              <a href="{% url 'lawyerclubbd' %}" class="btn btn-info text-light text-left btn-lg btn-block btn-huge border border-white rounded">Lawyers Club Bangladesh (News)</a>
+              </div>
+              <div class="col-md-12 col-sm-12">
+              <a href="{% url 'nationalportalbd' %}" class="btn btn-info text-light text-left btn-lg btn-block btn-huge border border-white rounded">National Portal of Bangladesh</a>
+              </div>
+              <div class="col-md-12 col-sm-12">
+              <a href="{% url 'supremecourtbd' %}" class="btn btn-info text-light text-left btn-lg btn-block btn-huge border border-white rounded">Supreme Court of Bangladesh</a>
+              </div>
+              </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends 'dashboard/dashboard.html' %}
+{% block title %}Drafting | Dashboard {% endblock title %} 
+{% load crispy_forms_tags %}
+
+{% block content %}
+<br>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-10 offset-md-1">
+        <div class="card shadow">
+          <div class="card-body">
+            <h3 class="text-center alert alert-primary" role="alert">Drafting</h3>
+
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title</th>
+                  
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for default in defaults %}
+                  <tr>
+                    <th scope="row">{{forloop.counter}}</th>
+                    <td><a href="{% url 'preparedrafting' case_id=case_id drafting_id=default.id %}">{{default.title}}</a></td>
+                 
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+            
+            {% comment %} <a href="javascript:window.print()">Print this page</a> {% endcomment %}
+            
+           
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+{% endblock %}
+
+
+

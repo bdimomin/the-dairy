@@ -68,3 +68,42 @@ class Case(models.Model):
 
     def __str__(self):
         return f"Case {self.case_no}"
+
+class DefaultDrafting(models.Model):
+    title = models.CharField(max_length=255, blank=True, null=True)
+    title2 = models.CharField(max_length=255, blank=True, null=True)
+    text1 =models.TextField(blank=True, null=True)
+    text2 =models.TextField(blank=True, null=True)
+    text3 =models.TextField(blank=True, null=True)
+    text4 =models.TextField(blank=True, null=True)
+    text5 =models.TextField(blank=True, null=True)
+    text6 =models.TextField(blank=True, null=True)
+    text7 =models.TextField(blank=True, null=True)
+    text8 =models.TextField(blank=True, null=True)
+    text9 =models.TextField(blank=True, null=True)
+    text10 =models.TextField(blank=True, null=True)
+    
+    def __str__(self):
+        return self.title
+    
+class Draftings(models.Model):
+    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,blank=True, null=True)
+    cases = models.ForeignKey(Case, on_delete=models.CASCADE,blank=True, null=True)
+    title = models.CharField(max_length=255, blank=True, null=True)
+    title2 = models.CharField(max_length=255, blank=True, null=True)
+    text1 =models.TextField(blank=True, null=True)
+    text2 =models.TextField(blank=True, null=True)
+    text3 =models.TextField(blank=True, null=True)
+    text4 =models.TextField(blank=True, null=True)
+    text5 =models.TextField(blank=True, null=True)
+    text6 =models.TextField(blank=True, null=True)
+    text7 =models.TextField(blank=True, null=True)
+    text8 =models.TextField(blank=True, null=True)
+    text9 =models.TextField(blank=True, null=True)
+    text10 =models.TextField(blank=True, null=True)
+    
+    def __str__(self):
+        return self.title
+    
+    
+    

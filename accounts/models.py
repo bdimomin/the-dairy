@@ -1,5 +1,5 @@
 from django.db import models
-from cases.models import Client
+from cases.models import Client, Case
 from users.models import CustomUser
 
 # Create your models here.
@@ -92,5 +92,6 @@ class VatStatements(models.Model):
     def __str__(self):
         return self.client
     
+
     
     

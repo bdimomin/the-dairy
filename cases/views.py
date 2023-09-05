@@ -1,7 +1,14 @@
+import os
+from django.shortcuts import render, redirect,get_list_or_404
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
+from datetime import date,datetime
 
 from django.shortcuts import render, redirect
 from .forms import CaseForm, CaseTypeForm, CourtForm, PoliceStationForm, ClientForm, BulkUploadForm
-from .models import Case, CaseType, Court, PoliceStation, Client
+from .models import Case, CaseType, Court, PoliceStation, Client, DefaultDrafting, Draftings
+from accounts.models import CustomUser
 from datetime import date, timedelta
 import pandas as pd
 # from reportlab.lib.pagesizes import letter
@@ -307,6 +314,148 @@ def not_updated_case_list(request):
     not_updated_cases = Case.objects.filter(updated=False, user=current_user)
     return render(request, 'cases/not_updated_cases.html', {'not_updated_cases': not_updated_cases})
 
+
+
+
+def importantLinks(request):
+    return render(request,'links/importantlinks.html')
+
+def barcouncil(request):
+    return render(request,'links/barcouncil.html') 
+
+def dhakabarassociation(request):
+    return render(request,'links/dhakabarassociation.html') 
+
+def dhakataxbarassociation(request):
+    return render(request,'links/dhakataxbarassociation.html') 
+
+def lawsofbd(request):
+    return render(request,'links/lawsofbd.html') 
+
+def lawyerclubbd(request):
+    return render(request,'links/lawyerclubbd.html') 
+
+def nationalportalbd(request):
+    return render(request,'links/nationalportalbd.html') 
+
+def supremecourtbd(request):
+    return render(request,'links/supremecourtbd.html') 
+
+
+def draftings(request):
+    cases = Case.objects.filter(user=request.user)
+    context={
+        'cases':cases,
+    }
+   
+    return render(request,'draftings/caseselect.html',context)
+
+def onedrafting(request):
+    case_id = request.POST.get('case_id')
+    cases = Case.objects.filter(id=case_id,user=request.user)
+    defaults = DefaultDrafting.objects.all()
+    context={
+        'cases':cases,
+        'defaults':defaults,
+        'case_id':case_id
+    }
+    return render(request,'draftings/onedrafting.html', context)
+
+def preparedrafting(request, case_id, drafting_id):
+    case= Case.objects.get(id=case_id)
+    draft = DefaultDrafting.objects.get(id=drafting_id)
+    
+    context={
+        'case':case,
+        'draft':draft,
+    }
+    
+    if request.method == 'POST':
+        case_id = request.POST.get('case_id')
+        case_no =request.POST.get('case_no')
+        law_section = request.POST.get('law_section')
+        first_party = request.POST.get('first_party')
+        second_party = request.POST.get('second_party')
+        title = request.POST.get('title')
+        title2 = request.POST.get('title2')
+        text1 = request.POST.get('text1')
+        text2 = request.POST.get('text2')
+        text3 = request.POST.get('text3')
+        text4 = request.POST.get('text4')
+        text5 = request.POST.get('text5')
+        text6 = request.POST.get('text6')
+        text7 = request.POST.get('text7')
+        text8 = request.POST.get('text8')
+        text9 = request.POST.get('text9')
+        text10 = request.POST.get('text10')
+        
+        user= CustomUser.objects.get(id=request.user.id)
+        case = Case.objects.get(id=case_id)
+        
+        # Draftings.objects.create(user=user,cases=case,title=title,title2=title2,text1=text1, text2=text2, text3=text3, text4=text4, text5=text5, text6=text6,text7=text7, text8=text8,text9=text9,text10=text10).save()
+        
+       
+        template_path = 'draftings/draftingpdf.html'
+        context = {'case_no': case_no,
+                   'law_section':law_section,
+                   'first_party':first_party,
+                   'second_party':second_party,
+                   'title':title,
+                   'title2':title2,
+                   'text1': text1,
+                   'text2': text2,
+                   'text3': text3,
+                   'text4': text4,
+                   'text5': text5,
+                   'text6': text6,
+                   'text7': text7,
+                   'text8': text8,
+                   'text9': text9,
+                   'text10': text10,
+                   }
+        # Create a Django response object, and specify content_type as pdf
+        response = HttpResponse(content_type='application/pdf')
+        
+        response['Content-Disposition'] = 'filename="drafting.pdf"'
+        # find the template and render it.
+        template = get_template(template_path)
+        html = template.render(context)
+
+        # create a pdf
+        pisa_status = pisa.CreatePDF(
+        html, dest=response)
+        # if error then show some funny view
+        if pisa_status.err:
+            return HttpResponse('We had some errors <pre>' + html + '</pre>')
+        return response
+        
+        
+        
+        
+    return render(request, 'draftings/drafting.html', context)
+
+
+
+def calculators(request):
+    return render(request,'dashboard/calculator.html')
+
+def custodycalculation(request):
+    
+    
+    if request.method == 'POST':
+        custody= request.POST.get('custodydate')
+        hearing= request.POST.get('hearing')
+        d1 = datetime.strptime(custody, "%Y-%m-%d")
+        d2 = datetime.strptime(hearing, "%Y-%m-%d")
+        calculate = d2-d1
+        
+        context={
+            'calculate': calculate
+        }
+        
+        return render(request,'dashboard/custodycalculator.html',context)
+       
+    return render(request,'dashboard/custodycalculator.html')
 
 # def generate_pdf(request):
 #     from io import BytesIO

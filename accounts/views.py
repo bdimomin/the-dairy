@@ -1,4 +1,5 @@
 import os
+
 from django.shortcuts import render, redirect,get_list_or_404
 from django.http import HttpResponse
 from django.template.loader import get_template
@@ -9,7 +10,8 @@ import itertools
 from num2words import num2words
 from . models import Transaction, BillInvoices, Quotations,IncomeStatements,ExpenseStatements,DueStatements, VatStatements
 from . forms import TransactionForm, BillInvoicesForm, QuotationsForm, IncomeStatementsForm,ExpenseStatementsForm,DueStatementsForm, VatStatementsForm
-
+from cases.models import Client
+from users.models import CustomUser
 
 # Create your views here.
 
@@ -48,12 +50,20 @@ def get_statements(request):
 def bill_invoices(request):
     user = request.user.id
     bill_invoices = BillInvoices.objects.filter(user=user)
-    form = BillInvoicesForm()
+    form = BillInvoicesForm(user=request.user)
     if request.method == 'POST':
-        form=BillInvoicesForm(request.POST)
-        if form.is_valid():
-            form.instance.user = request.user
-            form.save()
+        user = request.user.id
+        client= request.POST.get('client')
+        address= request.POST.get('address')
+        subjects = request.POST.get('subjects')
+        description = request.POST.get('description')
+        amount = request.POST.get('amount')
+        vat = request.POST.get('vat')
+        
+        user = CustomUser.objects.get(id=user)
+        client = Client.objects.get(id=client)
+        BillInvoices.objects.create(user=user,client=client, address=address, subjects=subjects,description=description, amount=amount, vat=vat).save()
+      
     return render(request,'accounts/bill_invoices.html',{'bill_invoices':bill_invoices,'form':form})
 
 
@@ -105,16 +115,32 @@ def paid_due_bills(request,pk):
     bills.save()
     return render(request,'accounts/due.html',{'due_bills':due_bills})
 
+
+
+
+
 def quotations(request):
     user = request.user.id
     quotations = Quotations.objects.filter(user=user)
-    form = QuotationsForm()
+    form = QuotationsForm(user=request.user)
     if request.method == 'POST':
-        form=QuotationsForm(request.POST)
-        if form.is_valid():
-            form.instance.user = request.user
-            form.save()
+        user = request.user.id
+        client= request.POST.get('client')
+        address= request.POST.get('address')
+        subjects = request.POST.get('subjects')
+        description = request.POST.get('description')
+        amount = request.POST.get('amount')
+        vat = request.POST.get('vat')
+        
+        user = CustomUser.objects.get(id=user)
+        client = Client.objects.get(id=client)
+        Quotations.objects.create(user=user,client=client, address=address, subjects=subjects,description=description, amount=amount, vat=vat).save()
+        
     return render(request,'accounts/quotations.html',{'quotations':quotations,'form':form})
+
+
+
+
 
 def oneQuotation(request,pk):
     quotation=Quotations.objects.get(pk=pk)
@@ -152,23 +178,35 @@ def quotationPdf(request, *args, **kwargs):
 def incomestatemts(request):  
     user = request.user.id
     income = IncomeStatements.objects.filter(user=user)
-    form = IncomeStatementsForm()
+    form = IncomeStatementsForm(user=request.user)
     if request.method =='POST':
-        form = IncomeStatementsForm(request.POST)
-        if form.is_valid():
-            form.instance.user = request.user
-            form.save()
+        user = request.user.id
+        client= request.POST.get('client')
+        date = request.POST.get('date')
+        purpose = request.POST.get('purpose')
+        amount = request.POST.get('amount')
+        user = CustomUser.objects.get(id=user)
+        client = Client.objects.get(id=client)
+        
+        IncomeStatements.objects.create(user=user,client=client, date=date,purpose=purpose,amount=amount).save()
+        
     return render(request,'accounts/incomestatements.html', {'form':form,'income':income})
 
 def expensestatements(request):  
     user = request.user.id
     expense = ExpenseStatements.objects.filter(user=user)
-    form = ExpenseStatementsForm()
+    form = ExpenseStatementsForm(user=request.user)
     if request.method =='POST':
-        form = ExpenseStatementsForm(request.POST)
-        if form.is_valid():
-            form.instance.user = request.user
-            form.save()
+        user = request.user.id
+        client= request.POST.get('client')
+        date = request.POST.get('date')
+        purpose = request.POST.get('purpose')
+        amount = request.POST.get('amount')
+        user = CustomUser.objects.get(id=user)
+        client = Client.objects.get(id=client)
+        
+        ExpenseStatements.objects.create(user=user,client=client, date=date,purpose=purpose,amount=amount).save()
+        
     return render(request,'accounts/expensestatements.html', {'form':form,'expense':expense})
 
 

@@ -1,0 +1,44 @@
+{% extends 'dashboard/dashboard.html' %}
+{% block title %}Calculator {% endblock title %} 
+{% load crispy_forms_tags %}
+
+{% block content %}
+<br>
+
+<div class="col-md-12">
+  <div class="card shadow rounded">
+  <div class="card-header shadow rounded bg-primary text-light">
+  Calculators
+  </div>
+  <div class="card-body">
+  <div class="row">
+  
+
+  <div class="col-md-4">
+  <a href="http://dolil.com/fees-calculator" class="btn btn-primary text-light  btn-lg btn-block btn-huge border border-white rounded">Land Registration Fee</a>
+  </div>
+
+  <div class="col-md-4">
+  <a href="http://উত্তরাধিকার.বাংলা" class="btn btn-primary text-light  btn-lg btn-block btn-huge border border-white rounded">Succession Calculator</a>
+  </div>
+ 
+  
+  <div class="col-md-4">
+  <a href="{% url 'custodycalculation' %}" class="btn btn-primary text-light  btn-lg btn-block btn-huge border border-white rounded">Custody Calculator</a>
+  </div>
+
+  </div>
+  <div class="card-body d-md-inline-block d-none">
+  </div>
+  </div>
+  </div>
+  </div>
+
+
+{% endblock %}
+
+
+
+
+
+

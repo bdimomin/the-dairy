@@ -1,0 +1,60 @@
+{% extends 'dashboard/dashboard.html' %}
+{% block title %}Custody Calculator {% endblock title %} 
+{% load crispy_forms_tags %}
+
+{% block content %}
+<br>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="card shadow">
+          <div class="card-body">
+            <h3 class="text-center alert alert-primary" role="alert">Custody Calculation</h3>
+      
+        <form method="POST">
+          {% csrf_token %}
+          <div class="form-group row">
+            <label for="custody" class="col-sm-4 col-form-label">Date of Custody</label>
+            <div class="col-sm-6">
+              <input type="date" class="form-control" id="custody" name="custodydate">
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label for="hearing" class="col-sm-4 col-form-label">Date of Hearing</label>
+            <div class="col-sm-6">
+              <input type="date" class="form-control" id="hearing" name="hearing">
+            </div>
+            <br>
+            <br>
+            
+          </div>
+          <div class="form-group row">
+            <div class="col-sm-6 offset-sm-4">
+              <button type="submit" class="btn btn-primary btn-block">Calculate</button>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <div class="col-sm-6 offset-sm-4">
+              {% if calculate %}
+              Total Custody : {{calculate.days}} days
+              {% endif %}
+            </div>
+          </div>
+        </form>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+
+
+
+{% endblock %}
+
+
+
+
+
+

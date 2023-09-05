@@ -34,4 +34,22 @@ urlpatterns = [
     path('decided-cases/',views.decided_case_list,name='decided-cases'),
     path('abandoned-cases/',views.abandoned_case_list,name='abandoned-cases'),
     path('notupdated-cases/',views.not_updated_case_list,name='notupdated-cases'),
+    
+    path('important-links/', views.importantLinks, name="important-links"),
+    path('important-links/barcouncil/', views.barcouncil, name="barcouncil"),
+    path('important-links/dhakabarassociation/', views.dhakabarassociation, name="dhakabarassociation"),
+    path('important-links/dhakataxbarassociation/', views.dhakataxbarassociation, name="dhakataxbarassociation"),
+    path('important-links/lawsofbd/', views.lawsofbd, name="lawsofbd"),
+    path('important-links/lawyerclubbd/', views.lawyerclubbd, name="lawyerclubbd"),
+    path('important-links/nationalportalbd/', views.nationalportalbd, name="nationalportalbd"),
+    path('important-links/supremecourtbd/', views.supremecourtbd, name="supremecourtbd"),
+    
+    
+    path('draftings/', views.draftings, name="draftings"),
+    path('drafting/', views.onedrafting, name="onedrafting"),
+    path('drafting/<int:case_id>/<int:drafting_id>/', views.preparedrafting, name="preparedrafting"),
+    
+    path('calculators/', views.calculators, name="calculators"),
+    path('calculators/custody/', views.custodycalculation, name="custodycalculation"),
+     
 ]

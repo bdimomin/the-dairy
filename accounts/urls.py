@@ -17,4 +17,7 @@ urlpatterns = [
     path('income/', views.incomestatemts, name="incomestatements"),
     path('expense/', views.expensestatements, name="expensestatments"),
     path('balance/', views.balancestatements, name="balancestatements"),
+    
+    
+   
 ]

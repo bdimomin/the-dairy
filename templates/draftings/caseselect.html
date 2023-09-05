@@ -1,0 +1,41 @@
+{% extends 'dashboard/dashboard.html' %}
+{% block title %}Drafting | Dashboard {% endblock title %} 
+{% load crispy_forms_tags %}
+
+{% block content %}
+<br>
+  <div class="container">
+    <div class="row">
+      <div class="col-md-8 offset-md-2">
+        <div class="card shadow">
+          <div class="card-body">
+            <h3 class="text-center alert alert-primary" role="alert">Select Case</h3>
+            <form action="{% url 'onedrafting' %}" method="POST">
+                {% csrf_token %}
+                <div class="form-group form-check">
+                    <select class="form-select" aria-label="Default select example" name="case_id">
+                        <option selected>Select Case</option>
+                        {% for case in cases %}
+                        <option value="{{case.id}}">Case Number: {{case.case_no}} - {{case.first_party}} VS {{case.second_party}} </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <br>
+
+                <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-primary btn-lg">Next</button>
+               </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+{% endblock %}
+
+
+
