@@ -395,8 +395,44 @@ def preparedrafting(request, case_id, drafting_id):
         # Draftings.objects.create(user=user,cases=case,title=title,title2=title2,text1=text1, text2=text2, text3=text3, text4=text4, text5=text5, text6=text6,text7=text7, text8=text8,text9=text9,text10=text10).save()
         
        
-        template_path = 'draftings/draftingpdf.html'
-        context = {'case_no': case_no,
+        # template_path = 'draftings/draftingpdf.html'
+        # context = {'case_no': case_no,
+        #            'law_section':law_section,
+        #            'first_party':first_party,
+        #            'second_party':second_party,
+        #            'title':title,
+        #            'title2':title2,
+        #            'text1': text1,
+        #            'text2': text2,
+        #            'text3': text3,
+        #            'text4': text4,
+        #            'text5': text5,
+        #            'text6': text6,
+        #            'text7': text7,
+        #            'text8': text8,
+        #            'text9': text9,
+        #            'text10': text10,
+        #            }
+        # # Create a Django response object, and specify content_type as pdf
+        # response = HttpResponse(content_type='application/pdf')
+        
+        # response['Content-Disposition'] = 'filename="drafting.pdf"'
+        # # find the template and render it.
+        # template = get_template(template_path)
+        # html = template.render(context)
+
+        # # create a pdf
+        # pisa_status = pisa.CreatePDF(
+        # html, dest=response)
+        # # if error then show some funny view
+        # if pisa_status.err:
+        #     return HttpResponse('We had some errors <pre>' + html + '</pre>')
+        # return response
+        
+        
+        context = {
+                    'case':case,
+                    'case_no': case_no,
                    'law_section':law_section,
                    'first_party':first_party,
                    'second_party':second_party,
@@ -413,21 +449,7 @@ def preparedrafting(request, case_id, drafting_id):
                    'text9': text9,
                    'text10': text10,
                    }
-        # Create a Django response object, and specify content_type as pdf
-        response = HttpResponse(content_type='application/pdf')
-        
-        response['Content-Disposition'] = 'filename="drafting.pdf"'
-        # find the template and render it.
-        template = get_template(template_path)
-        html = template.render(context)
-
-        # create a pdf
-        pisa_status = pisa.CreatePDF(
-        html, dest=response)
-        # if error then show some funny view
-        if pisa_status.err:
-            return HttpResponse('We had some errors <pre>' + html + '</pre>')
-        return response
+        return render(request, 'draftings/pdf.html',context)
         
         
         

@@ -11,43 +11,44 @@
       <br>
   <form method="POST">
     {% csrf_token %}
-    <div class="row">
-      <div class="col-md-4 offset-md-4">
-        <div class="form-group">
-         <input type="hidden" name="case_id" value="{{case.id}}">
-          <input type="text" class="form-control" name="case_no" value="Case No-{{case.case_no }}">
-         
-        </div>
+    
+
+    <div class="form-group row">
+      <input type="hidden" name="case_id" value="{{case.id}}">
+      <label class="col-md-2 offset-md-4 "> মামলার নাম্বারঃ </label>
+      <div class="col-md-2">
+        <input type="text" class="form-control" name="case_no" value="{{case.case_no }}">
+      </div>
+      
+    </div>
+    <div class="form-group row">
+      <label class="col-md-2 offset-md-4 "> মামলার ধারাঃ </label>
+      <div class="col-md-2">
+        <input type="text" class="form-control" name="law_section" value="{{case.law_and_section }}">
+      </div>
+      
+    </div>
+
+    <div class="form-group row">
+      <label class="col-md-2"> অভিযোগকারীঃ </label>
+      <div class="col-md-3">
+        <input type="text" class="form-control" name="first_party" value="{{case.first_party }}">
+      </div>
+
+      <div class="col-md-3"> <h3> বনাম </h3></div>
+
+      <label class="col-md-1 "> আসামীঃ  </label>
+      <div class="col-md-3">
+        <input type="text" class="form-control" name="second_party" value="{{case.second_party }}">
       </div>
     </div>
 
-    <div class="row">
-      <div class="col-md-4 offset-md-4">
-        <div class="form-group">
-         
-          <input type="text" class="form-control" name="law_section" value="Section-{{case.law_and_section }}">
-         
-        </div>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-4">
-        <div class="form-group">
-          <input type="text" class="form-control" name="first_party" value="Complainant - {{case.first_party }}">
-        </div>
-      </div>
-      <div class="col-md-4 offset-md-4">
-        <div class="form-group">
-          <input type="text" class="form-control" name="second_party" value="Accused  - {{case.second_party }}">
-        </div>
-      </div>
-    </div>
+   
 <br>
 
     
     <div class="form-group row">
-      <label class="col-md-2 text-right" style="font-size:1.5rem"><b> Subject </b></label>
+      <label class="col-md-2 text-right" style="font-size:1.5rem"><b> বিষয়ঃ </b></label>
       <div class="col-md-10">
         <input type="text" class="form-control" name="title" value="{{draft.title }}">
       </div>
@@ -167,6 +168,7 @@
     
     <div class="row">
       <div class="col-md-2 offset-md-4">
+        
         <button type="submit" class="btn btn-primary btn-lg btn-block"> Save & Print</button>
       </div>
     </div>
