@@ -1,6 +1,6 @@
 from django.db import models
 from cases.models import Client, Case
-from users.models import CustomUser
+from users.models import User
 
 # Create your models here.
 
@@ -14,14 +14,14 @@ class Transaction(models.Model):
     details = models.TextField(blank=True,null=True)
     amount = models.DecimalField(max_digits=19, decimal_places=2,blank=True, null=True)
     date = models.DateField(auto_now_add=True)
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE,blank=True, null=True)
 
     def __str__(self):
         return f"Date: {self.date}, Client: {self.party_name}"
     
     
 class BillInvoices(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE,blank=True, null=True)
     client= models.ForeignKey(Client, on_delete=models.CASCADE)
     address = models.CharField(max_length=150,null=True,blank=True)
     subjects= models.CharField(max_length=255, blank=True, null=True)
@@ -37,7 +37,7 @@ class BillInvoices(models.Model):
         return self.subjects
     
 class Quotations(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE,blank=True, null=True)
     client= models.ForeignKey(Client, on_delete=models.CASCADE)
     address = models.CharField(max_length=150,null=True,blank=True)
     subjects= models.CharField(max_length=255, blank=True, null=True)
@@ -53,7 +53,7 @@ class Quotations(models.Model):
     
     
 class IncomeStatements(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE,blank=True, null=True)
     client= models.ForeignKey(Client, on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True, blank=True, null=True)
     purpose = models.CharField(max_length=150,null=True,blank=True)
@@ -63,7 +63,7 @@ class IncomeStatements(models.Model):
         return self.client
     
 class ExpenseStatements(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE,blank=True, null=True)
     client= models.ForeignKey(Client, on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True, blank=True, null=True)
     purpose = models.CharField(max_length=150,null=True,blank=True)
@@ -73,7 +73,7 @@ class ExpenseStatements(models.Model):
         return self.client
     
 class DueStatements(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE,blank=True, null=True)
     client= models.ForeignKey(Client, on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True, blank=True, null=True)
     purpose = models.CharField(max_length=150,null=True,blank=True)
@@ -83,7 +83,7 @@ class DueStatements(models.Model):
         return self.client
     
 class VatStatements(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=models.CASCADE,blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE,blank=True, null=True)
     client= models.ForeignKey(Client, on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True, blank=True, null=True)
     purpose = models.CharField(max_length=150,null=True,blank=True)

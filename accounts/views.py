@@ -11,7 +11,7 @@ from num2words import num2words
 from . models import Transaction, BillInvoices, Quotations,IncomeStatements,ExpenseStatements,DueStatements, VatStatements
 from . forms import TransactionForm, BillInvoicesForm, QuotationsForm, IncomeStatementsForm,ExpenseStatementsForm,DueStatementsForm, VatStatementsForm
 from cases.models import Client
-from users.models import CustomUser
+from users.models import User
 
 # Create your views here.
 
@@ -60,7 +60,7 @@ def bill_invoices(request):
         amount = request.POST.get('amount')
         vat = request.POST.get('vat')
         
-        user = CustomUser.objects.get(id=user)
+        user = User.objects.get(id=user)
         client = Client.objects.get(id=client)
         BillInvoices.objects.create(user=user,client=client, address=address, subjects=subjects,description=description, amount=amount, vat=vat).save()
       
@@ -132,7 +132,7 @@ def quotations(request):
         amount = request.POST.get('amount')
         vat = request.POST.get('vat')
         
-        user = CustomUser.objects.get(id=user)
+        user = User.objects.get(id=user)
         client = Client.objects.get(id=client)
         Quotations.objects.create(user=user,client=client, address=address, subjects=subjects,description=description, amount=amount, vat=vat).save()
         
@@ -185,7 +185,7 @@ def incomestatemts(request):
         date = request.POST.get('date')
         purpose = request.POST.get('purpose')
         amount = request.POST.get('amount')
-        user = CustomUser.objects.get(id=user)
+        user = User.objects.get(id=user)
         client = Client.objects.get(id=client)
         
         IncomeStatements.objects.create(user=user,client=client, date=date,purpose=purpose,amount=amount).save()
@@ -202,7 +202,7 @@ def expensestatements(request):
         date = request.POST.get('date')
         purpose = request.POST.get('purpose')
         amount = request.POST.get('amount')
-        user = CustomUser.objects.get(id=user)
+        user = User.objects.get(id=user)
         client = Client.objects.get(id=client)
         
         ExpenseStatements.objects.create(user=user,client=client, date=date,purpose=purpose,amount=amount).save()

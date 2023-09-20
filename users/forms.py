@@ -1,12 +1,13 @@
 from django import forms
-from .models import CustomUser
+from .models import *
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
+
 
 class CustomUserForm(UserCreationForm):
 
     class Meta:
-        model=CustomUser
+        model=User
         fields=['name','email','phone','password1','password2']
 
         
@@ -15,7 +16,7 @@ class UserLoginForm(forms.ModelForm):
     email = forms.EmailField()
     password = forms.CharField(label="Password",widget=forms.PasswordInput)
     class Meta:
-        model=CustomUser
+        model=User
         fields=['email', 'password']
         
     def clean(self):
@@ -29,8 +30,42 @@ class UserLoginForm(forms.ModelForm):
             
 class ProfileUpdateForm(forms.ModelForm):
     class Meta:
-        model=CustomUser
+        model=User
         fields=['name','email','phone','designation','qualification','membership_number','bar_assosciation','date_of_birth','gender','chamber_address','photo']
         widgets = {
             'date_of_birth': forms.DateInput(attrs={'type': 'date'}),
         }  
+        
+class RegistrationForm(forms.ModelForm):
+    class Meta:
+        model = Registration
+        fields=['name','email','mobile','amount',]
+class RenewalForm(forms.ModelForm):
+    class Meta:
+        model = Renewal
+        fields=['name','amount']
+        
+class ExpensesForm(forms.ModelForm):
+    class Meta:
+        model = Expenses
+        fields=['purpose','amount']
+        
+class SuperAdminIncomeStatementForm(forms.ModelForm):
+    class Meta:
+        model = SuperAdminIncomeStatement
+        fields = '__all__'
+        
+    def __init__(self, user=None, **kwargs):
+        super(SuperAdminIncomeStatementForm, self).__init__(**kwargs)
+        if user:
+            self.fields['client'].queryset =User.objects.filter(is_superadmin=0)
+class SuperAdminExpenseStatementForm(forms.ModelForm):
+    class Meta:
+        model = SuperAdminExpenseStatement
+        fields = '__all__'
+        
+    def __init__(self, user=None, **kwargs):
+        super(SuperAdminExpenseStatementForm, self).__init__(**kwargs)
+        if user:
+            self.fields['client'].queryset =User.objects.filter(is_superadmin=0)
+        

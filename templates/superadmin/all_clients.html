@@ -1,0 +1,68 @@
+{% extends 'superadmin/base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+<br>
+
+      <div class="card mb-4 ml-4 mr-4">
+        <div class="card-header">
+            <i class="fas fa-table me-1"></i>
+            All Clients
+           
+        </div>
+        <div class="card-body">
+          {% if xyz %}
+            <table id="datatablesSimple">
+                <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Mobile</th>
+                      <th>email</th>
+                      <th>Registration Date</th>
+                      <th>Renewal Date</th>
+                      <th>No. of Clients</th>
+                      <th>Status</th>
+                    </tr>
+                </thead>
+                <tfoot>
+                    <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Mobile</th>
+                      <th>email</th>
+                      <th>Registration Date</th>
+                      <th>Renewal Date</th>
+                      <th>No. of Clients</th>
+                      <th>Status</th>
+                    </tr>
+                </tfoot>
+                <tbody>
+                  {% for clients, no_of_clients in xyz %}
+                  <tr>
+                            <td>{{clients.id}}</td>
+                            <td>{{ clients.name }}</td>
+
+                            <td>{{ clients.phone }}</td>
+
+                            <td>{{ clients.email }}</td>
+
+                            <td>{{clients.created_date|date:"d F Y" }}</td>
+                            <td></td>
+                           
+                            <td>{{no_of_clients}}</td>
+                            
+                            {% if clients.is_active %}
+                            <td>Active</td>
+                            {% else %}
+                            <td>Inactive</td>
+                            {% endif %}
+                  </tr>
+                  {% endfor %}
+                </tbody>
+            </table>
+        </div>
+      </div>
+      {% endif %}
+      
+
+{% endblock %}

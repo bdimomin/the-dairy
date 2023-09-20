@@ -8,7 +8,7 @@ from datetime import date,datetime
 from django.shortcuts import render, redirect
 from .forms import CaseForm, CaseTypeForm, CourtForm, PoliceStationForm, ClientForm, BulkUploadForm
 from .models import Case, CaseType, Court, PoliceStation, Client, DefaultDrafting, Draftings
-from accounts.models import CustomUser
+from users.models import User
 from datetime import date, timedelta
 import pandas as pd
 # from reportlab.lib.pagesizes import letter
@@ -389,7 +389,7 @@ def preparedrafting(request, case_id, drafting_id):
         text9 = request.POST.get('text9')
         text10 = request.POST.get('text10')
         
-        user= CustomUser.objects.get(id=request.user.id)
+        user= User.objects.get(id=request.user.id)
         case = Case.objects.get(id=case_id)
         
         # Draftings.objects.create(user=user,cases=case,title=title,title2=title2,text1=text1, text2=text2, text3=text3, text4=text4, text5=text5, text6=text6,text7=text7, text8=text8,text9=text9,text10=text10).save()

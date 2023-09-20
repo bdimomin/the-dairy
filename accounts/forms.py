@@ -1,7 +1,7 @@
 from django import forms
 from . models import Transaction, BillInvoices, Quotations, IncomeStatements,ExpenseStatements,DueStatements,VatStatements
 from cases.models import Client
-from users.models import CustomUser
+from users.models import User
 
 class TransactionForm(forms.ModelForm):
     class Meta:
