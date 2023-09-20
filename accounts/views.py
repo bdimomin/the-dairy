@@ -211,11 +211,17 @@ def expensestatements(request):
 
 
 def balancestatements(request):  
-    user = request.user.id
-    income = IncomeStatements.objects.filter(user=user)
-    sumincome = IncomeStatements.objects.filter(user=user).aggregate(sumincome=Sum('amount'))
-    expense = ExpenseStatements.objects.filter(user=user)
-    sumexpense = ExpenseStatements.objects.filter(user=user).aggregate(sumexpense=Sum('amount'))
-    netbalance= sumincome["sumincome"]-sumexpense["sumexpense"]
-    balance = itertools.zip_longest(income, expense)
-    return render(request,'accounts/balancestatements.html', {'balance':balance,'netbalance':netbalance})
+    
+    try:
+        user = request.user.id
+        income = IncomeStatements.objects.filter(user=user)
+        sumincome = IncomeStatements.objects.filter(user=user).aggregate(sumincome=Sum('amount'))
+        expense = ExpenseStatements.objects.filter(user=user)
+        sumexpense = ExpenseStatements.objects.filter(user=user).aggregate(sumexpense=Sum('amount'))
+        netbalance= sumincome["sumincome"]-sumexpense["sumexpense"]
+        balance = itertools.zip_longest(income, expense)
+        return render(request,'accounts/balancestatements.html', {'balance':balance,'netbalance':netbalance})
+    except:
+        return HttpResponse("Sorry! No Data Found!")
+    
+    

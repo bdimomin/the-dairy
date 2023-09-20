@@ -125,3 +125,11 @@ class SuperAdminExpenseStatement(models.Model):
     def __str__(self):
         return self.client
     
+class SMSBundle(models.Model):
+    client= models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
+    date = models.DateField(auto_now_add=True, blank=True, null=True)
+    sms_quantity=models.IntegerField(null=True, blank=True)
+    
+    def __str__(self):
+        return self.name
+    

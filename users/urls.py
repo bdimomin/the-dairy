@@ -20,6 +20,7 @@ urlpatterns = [
     path('useradmin/income-statement/', views.incomestatemts, name="superadminIncomeStatement"),
     path('useradmin/expense-statement/', views.expensestements, name="superadminExpenseStements"),
     path('useradmin/balance-statement/', views.balancestatements, name="superadminBalanceStatement"),
+    path('useradmin/sms-bundle/', views.smsbundle, name="smsbundle"),
     
     
 ]

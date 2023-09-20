@@ -68,4 +68,13 @@ class SuperAdminExpenseStatementForm(forms.ModelForm):
         super(SuperAdminExpenseStatementForm, self).__init__(**kwargs)
         if user:
             self.fields['client'].queryset =User.objects.filter(is_superadmin=0)
+class SMSBundleForm(forms.ModelForm):
+    class Meta:
+        model = SMSBundle
+        fields = '__all__'
+        
+    def __init__(self, user=None, **kwargs):
+        super(SMSBundleForm, self).__init__(**kwargs)
+        if user:
+            self.fields['client'].queryset =User.objects.filter(is_superadmin=0)
         

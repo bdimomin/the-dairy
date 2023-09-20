@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponse
 from django.contrib.auth import login,logout, authenticate
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
@@ -30,11 +30,11 @@ def index(request):
 
 @user_passes_test(superadmin, login_url="/login/")
 def home(request):
-    all_clients = User.objects.all().count()
+    all_clients = User.objects.filter(is_superadmin=0).count()
     # running_cases = Case.objects.filter(user=user, status='Running').count()
-    new_clients = User.objects.filter(date_joined=date.today()).count()
-    active_clients = User.objects.filter(is_active=1).count()
-    inactive_clients = User.objects.filter(is_active=0).count()
+    new_clients = User.objects.filter(is_superadmin=0,date_joined=date.today()).count()
+    active_clients = User.objects.filter(is_superadmin=0,is_active=1).count()
+    inactive_clients = User.objects.filter(is_superadmin=0,is_active=0).count()
     # decided_cases = Case.objects.filter(user=user, status='Decided').count()
     # abandoned_cases = Case.objects.filter(user=user, status='Abandoned').count()
 
@@ -230,12 +230,30 @@ def expensestements(request):
 
 @user_passes_test(superadmin, login_url="/login/")
 def balancestatements(request):  
-    income = SuperAdminIncomeStatement.objects.all()
-    sumincome = SuperAdminIncomeStatement.objects.all().aggregate(sumincome=Sum('amount'))
-    expense = SuperAdminExpenseStatement.objects.all()
-    sumexpense = SuperAdminExpenseStatement.objects.all().aggregate(sumexpense=Sum('amount'))
-    netbalance= sumincome["sumincome"]-sumexpense["sumexpense"]
-    balance = itertools.zip_longest(income, expense)
-    return render(request,'superadmin/balancestatements.html', {'balance':balance,'netbalance':netbalance})
+    try:
+        income = SuperAdminIncomeStatement.objects.all()
+        sumincome = SuperAdminIncomeStatement.objects.all().aggregate(sumincome=Sum('amount'))
+        expense = SuperAdminExpenseStatement.objects.all()
+        sumexpense = SuperAdminExpenseStatement.objects.all().aggregate(sumexpense=Sum('amount'))
+        netbalance= sumincome["sumincome"]-sumexpense["sumexpense"]
+        balance = itertools.zip_longest(income, expense)
+        return render(request,'superadmin/balancestatements.html', {'balance':balance,'netbalance':netbalance})
+    except:
+        return HttpResponse(" Sorry! No Data Found")
+    
+@user_passes_test(superadmin, login_url="/login/")
+def smsbundle(request):  
+    sms = SMSBundle.objects.all()
+    form = SMSBundleForm(user=request.user)
+    if request.method =='POST':
+        client= request.POST.get('client')
+        sms_quantity = request.POST.get('sms_quantity')
+    
+        clients = User.objects.get(id=client)
+        
+        SMSBundle.objects.create(client=clients, sms_quantity=sms_quantity).save()
+        
+    return render(request,'superadmin/smsbundle.html', {'form':form,'sms':sms})
+
 
 
