@@ -164,11 +164,14 @@ def registry(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             form.save()
+            return redirect('superadminregistration')
             
         context['registration_form']= form
     else:
+        registration = Registration.objects.all()
         form = RegistrationForm()
         context['registration_form']= form
+        context['registration']=registration 
     return render(request, 'superadmin/registration.html', context)
 
 @user_passes_test(superadmin, login_url="/login/")
@@ -178,10 +181,13 @@ def renewal(request):
         form = RenewalForm(request.POST)
         if form.is_valid():
             form.save()
+            return redirect('renewal')
         context['renewal_form']= form
     else:
+        renewal = Renewal.objects.all()
         form = RenewalForm()
         context['renewal_form']= form
+        context['renewal']=renewal
     return render(request, 'superadmin/renewal.html', context)
 
 @user_passes_test(superadmin, login_url="/login/")
@@ -191,10 +197,13 @@ def expenses(request):
         form = ExpensesForm(request.POST)
         if form.is_valid():
             form.save()
+            return redirect('expenses')
         context['expenses_form']= form
     else:
         form = ExpensesForm()
         context['expenses_form']= form
+        expenses = Expenses.objects.all()
+        context['expenses']= expenses
     return render(request, 'superadmin/expenses.html', context)
 
 @user_passes_test(superadmin, login_url="/login/")

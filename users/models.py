@@ -95,10 +95,10 @@ class Renewal(models.Model):
         return self.name
 class Expenses(models.Model):
     purposes = (
-        ('domain registration','Domain Registration'),
-        ('domain renewal', 'Domain Renewal'),
-        ('hosting registration','Hosting Registration'),
-        ('hosting renewal', 'Hosting Renewal'),
+        ('Domain Registration','Domain Registration'),
+        ('Domain Renewal', 'Domain Renewal'),
+        ('Hosting Registration','Hosting Registration'),
+        ('Hosting Renewal', 'Hosting Renewal'),
         
     )
     purpose = models.CharField(max_length=50,choices=purposes)
