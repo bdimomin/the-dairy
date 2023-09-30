@@ -6,6 +6,7 @@ from django.template.loader import get_template
 from xhtml2pdf import pisa
 from datetime import date
 from django.db.models import Sum
+from django.contrib.auth.decorators import login_required
 import itertools
 from num2words import num2words
 from . models import Transaction, BillInvoices, Quotations,IncomeStatements,ExpenseStatements,DueStatements, VatStatements
@@ -27,11 +28,11 @@ from users.models import User
 
 
 
-
+@login_required(login_url="/login/")
 def get_statements(request):
     user = request.user.id
     statements = Transaction.objects.filter(user=user)
-    
+
     if request.method == 'POST':
         form = TransactionForm(request.POST)
         if form.is_valid():
@@ -46,7 +47,7 @@ def get_statements(request):
 
 
 
-
+@login_required(login_url="/login/")
 def bill_invoices(request):
     user = request.user.id
     bill_invoices = BillInvoices.objects.filter(user=user)
@@ -59,21 +60,21 @@ def bill_invoices(request):
         description = request.POST.get('description')
         amount = request.POST.get('amount')
         vat = request.POST.get('vat')
-        
+
         user = User.objects.get(id=user)
         client = Client.objects.get(id=client)
         BillInvoices.objects.create(user=user,client=client, address=address, subjects=subjects,description=description, amount=amount, vat=vat).save()
-      
+
     return render(request,'accounts/bill_invoices.html',{'bill_invoices':bill_invoices,'form':form})
 
-
+@login_required(login_url="/login/")
 def onebill_invoice(request,pk):
     bill_invoice=BillInvoices.objects.get(pk=pk)
     total = bill_invoice.amount + bill_invoice.vat
     word= num2words(total)
     return render(request,'accounts/one_bill_invoice.html',{'bill_invoice':bill_invoice,'word':word})
 
-
+@login_required(login_url="/login/")
 def billinvoicePDF(request, *args, **kwargs):
     pk = kwargs.get('pk')
     billInvoice=BillInvoices.objects.get(pk=pk)
@@ -85,7 +86,7 @@ def billinvoicePDF(request, *args, **kwargs):
     context = {'billInvoice': billInvoice,'user':user,'today':today,'word':word}
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
-    
+
     response['Content-Disposition'] = 'filename="bill_invoice.pdf"'
     # find the template and render it.
     template = get_template(template_path)
@@ -100,13 +101,13 @@ def billinvoicePDF(request, *args, **kwargs):
     return response
 
 
-
+@login_required(login_url="/login/")
 def due_bills(request):
     user = request.user.id
     due_bills = BillInvoices.objects.filter(user=user,is_paid=0)
     return render(request,'accounts/due.html',{'due_bills':due_bills})
 
-
+@login_required(login_url="/login/")
 def paid_due_bills(request,pk):
     user = request.user.id
     due_bills = BillInvoices.objects.filter(user=user, is_paid=0)
@@ -118,7 +119,7 @@ def paid_due_bills(request,pk):
 
 
 
-
+@login_required(login_url="/login/")
 def quotations(request):
     user = request.user.id
     quotations = Quotations.objects.filter(user=user)
@@ -131,24 +132,24 @@ def quotations(request):
         description = request.POST.get('description')
         amount = request.POST.get('amount')
         vat = request.POST.get('vat')
-        
+
         user = User.objects.get(id=user)
         client = Client.objects.get(id=client)
         Quotations.objects.create(user=user,client=client, address=address, subjects=subjects,description=description, amount=amount, vat=vat).save()
-        
+
     return render(request,'accounts/quotations.html',{'quotations':quotations,'form':form})
 
 
 
 
-
+@login_required(login_url="/login/")
 def oneQuotation(request,pk):
     quotation=Quotations.objects.get(pk=pk)
     total = quotation.amount + quotation.vat
     word= num2words(total)
     return render(request,'accounts/oneQuotation.html',{'quotation':quotation,'word':word})
 
-
+@login_required(login_url="/login/")
 def quotationPdf(request, *args, **kwargs):
     pk = kwargs.get('pk')
     quotation=Quotations.objects.get(pk=pk)
@@ -160,7 +161,7 @@ def quotationPdf(request, *args, **kwargs):
     context = {'quotation': quotation,'user':user,'today':today,'word':word}
     # Create a Django response object, and specify content_type as pdf
     response = HttpResponse(content_type='application/pdf')
-    
+
     response['Content-Disposition'] = 'filename="quotation.pdf"'
     # find the template and render it.
     template = get_template(template_path)
@@ -174,8 +175,8 @@ def quotationPdf(request, *args, **kwargs):
        return HttpResponse('We had some errors <pre>' + html + '</pre>')
     return response
 
-
-def incomestatemts(request):  
+@login_required(login_url="/login/")
+def incomestatemts(request):
     user = request.user.id
     income = IncomeStatements.objects.filter(user=user)
     form = IncomeStatementsForm(user=request.user)
@@ -187,12 +188,13 @@ def incomestatemts(request):
         amount = request.POST.get('amount')
         user = User.objects.get(id=user)
         client = Client.objects.get(id=client)
-        
+
         IncomeStatements.objects.create(user=user,client=client, date=date,purpose=purpose,amount=amount).save()
-        
+
     return render(request,'accounts/incomestatements.html', {'form':form,'income':income})
 
-def expensestatements(request):  
+@login_required(login_url="/login/")
+def expensestatements(request):
     user = request.user.id
     expense = ExpenseStatements.objects.filter(user=user)
     form = ExpenseStatementsForm(user=request.user)
@@ -204,14 +206,14 @@ def expensestatements(request):
         amount = request.POST.get('amount')
         user = User.objects.get(id=user)
         client = Client.objects.get(id=client)
-        
+
         ExpenseStatements.objects.create(user=user,client=client, date=date,purpose=purpose,amount=amount).save()
-        
+
     return render(request,'accounts/expensestatements.html', {'form':form,'expense':expense})
 
+@login_required(login_url="/login/")
+def balancestatements(request):
 
-def balancestatements(request):  
-    
     try:
         user = request.user.id
         income = IncomeStatements.objects.filter(user=user)
@@ -223,5 +225,4 @@ def balancestatements(request):
         return render(request,'accounts/balancestatements.html', {'balance':balance,'netbalance':netbalance})
     except:
         return HttpResponse("Sorry! No Data Found!")
-    
-    
+

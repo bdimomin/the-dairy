@@ -40,10 +40,17 @@ class RegistrationForm(forms.ModelForm):
     class Meta:
         model = Registration
         fields=['name','email','mobile','amount',]
+        
+        
 class RenewalForm(forms.ModelForm):
     class Meta:
         model = Renewal
         fields=['name','amount']
+        
+    def __init__(self, user=None, **kwargs):
+        super(RenewalForm, self).__init__(**kwargs)
+        if user:
+            self.fields['name'].queryset =User.objects.filter(is_superadmin=0)
         
 class ExpensesForm(forms.ModelForm):
     class Meta:
@@ -77,4 +84,15 @@ class SMSBundleForm(forms.ModelForm):
         super(SMSBundleForm, self).__init__(**kwargs)
         if user:
             self.fields['client'].queryset =User.objects.filter(is_superadmin=0)
+        
+
+class StatusUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['status']
+        
+    def __init__(self, *args, **kwargs):
+        super(StatusUpdateForm, self).__init__(*args, **kwargs)
+        self.fields['status'].label = False
+        
         

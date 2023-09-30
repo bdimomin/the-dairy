@@ -13,9 +13,16 @@ from django.db.models import Count
 from django.db.models import Sum
 import itertools
 from datetime import date
+from django.db.models import Q
 
 from cases.forms import *
 from users.forms import *
+
+
+
+def custom_404(request, exception):
+    return render(request, '404.html', status=404)
+
 
 def superadmin(user):
     try:
@@ -34,7 +41,8 @@ def home(request):
     # running_cases = Case.objects.filter(user=user, status='Running').count()
     new_clients = User.objects.filter(is_superadmin=0,date_joined=date.today()).count()
     active_clients = User.objects.filter(is_superadmin=0,is_active=1).count()
-    inactive_clients = User.objects.filter(is_superadmin=0,is_active=0).count()
+    inactive_clients = User.objects.filter(is_superadmin=0,status="Inactive").count()
+    terminated_clients = User.objects.filter(is_superadmin=0,status="Terminate").count()
     # decided_cases = Case.objects.filter(user=user, status='Decided').count()
     # abandoned_cases = Case.objects.filter(user=user, status='Abandoned').count()
 
@@ -42,7 +50,8 @@ def home(request):
         'all_clients': all_clients,
         'new_clients':new_clients,
         'active_clients': active_clients,
-        'inactive_clients':inactive_clients
+        'inactive_clients':inactive_clients,
+        'terminated_clients':terminated_clients,
     }
     return render(request,'superadmin/home.html',context)
 
@@ -92,6 +101,7 @@ def login_view(request):
         return redirect('dashboard') 
 
     login_form = UserLoginForm()
+    errormessage={}
     if request.method=="POST":
         login_form= UserLoginForm(request.POST)
         if login_form.is_valid():
@@ -100,16 +110,20 @@ def login_view(request):
             user=authenticate(request,email=email,password=password)
             
             if user is not None:
-                login(request,user)
-                if request.user.is_superadmin==1:
-                    return redirect('superadminhome')
+                if user.status=="Active":
+                   login(request,user)
+                   if request.user.is_superadmin==1:
+                       return redirect('superadminhome')
+                   elif request.user.status=="Active":
+                       return redirect('dashboard')
                 else:
-                    return redirect('dashboard')
+                    errormessage['message'] = user.status
+                
             else:
                 return redirect('login_user')
     else:
         login_form= UserLoginForm()
-    return render(request,'registration/login.html',{'login_form':login_form})
+    return render(request,'registration/login.html',{'login_form':login_form,'errormessage':errormessage})
 
 def profile_page(request):
     user = request.user.id
@@ -149,12 +163,23 @@ def new_client(request):
 @user_passes_test(superadmin, login_url="/login/")
 def all_clients(request):
     clients = User.objects.filter(is_superadmin=0)
+    update = StatusUpdateForm()
     no_of_clients=[]
+    reg_date =[]
     for client in clients:
         abc = Client.objects.filter(user=client.id).count()
         no_of_clients.append(abc)
-    xyz = zip(clients, no_of_clients)
-    return render(request, 'superadmin/all_clients.html',{'xyz':xyz})
+        
+    xyz = itertools.zip_longest(clients, no_of_clients)
+    
+    if request.method == 'POST':
+        client_id = request.POST.get('client_id')
+        status  = request.POST.get('status')
+        user = User.objects.get(id=client_id)
+        user.status=status
+        user.save()
+        return redirect('all_clients')
+    return render(request, 'superadmin/all_clients.html',{'xyz':xyz,'update':update})
 
 
 @user_passes_test(superadmin, login_url="/login/")
@@ -174,21 +199,21 @@ def registry(request):
         context['registration']=registration 
     return render(request, 'superadmin/registration.html', context)
 
+
+
+
 @user_passes_test(superadmin, login_url="/login/")
 def renewal(request):
-    context={}
     if request.method == 'POST':
-        form = RenewalForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('renewal')
-        context['renewal_form']= form
+        name= request.POST.get('name')
+        amount = request.POST.get('amount')
+        users = User.objects.get(id=name)
+        Renewal.objects.create(name=users, amount=amount).save()
+        return redirect('renewal')
     else:
+        form = RenewalForm(user=request.user)
         renewal = Renewal.objects.all()
-        form = RenewalForm()
-        context['renewal_form']= form
-        context['renewal']=renewal
-    return render(request, 'superadmin/renewal.html', context)
+    return render(request, 'superadmin/renewal.html', {'form':form,'renewal':renewal})
 
 @user_passes_test(superadmin, login_url="/login/")
 def expenses(request):

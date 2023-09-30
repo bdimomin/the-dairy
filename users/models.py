@@ -13,7 +13,9 @@ class UserManager(BaseUserManager):
             email= self.normalize_email(email),
             name=name,
             phone=phone,
+            
         )
+       
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -25,6 +27,7 @@ class UserManager(BaseUserManager):
             phone=phone,
             password=password
         )
+        user.status= "Active"
         user.is_admin = True
         user.is_active = True
         user.is_staff = True
@@ -33,6 +36,13 @@ class UserManager(BaseUserManager):
         return user
 
 class User(AbstractBaseUser):
+    STATUS = (
+        ('Active','Active'),
+        ('Inactive', 'Inactive'),
+        ('Trash','Trash'),
+        ('Terminate', 'Terminate'),
+        
+    )
     name= models.CharField(max_length=255)
     email= models.EmailField(max_length=100,unique=True)
     phone= models.CharField(max_length=15,unique=True)
@@ -41,6 +51,7 @@ class User(AbstractBaseUser):
     membership_number= models.IntegerField(null=True, blank=True)
     bar_assosciation = models.CharField(max_length=100, blank=True, null=True)
     date_of_birth= models.DateField(null=True, blank=True)
+    status = models.CharField(max_length=100, choices=STATUS, default="Active", blank=True, null=True)
     
     GENDER_CHOICES = (
         ('Male', 'Male'),
@@ -86,13 +97,16 @@ class Registration(models.Model):
     
     def __str__(self):
         return self.name
+
+    
 class Renewal(models.Model):
-    name= models.CharField(max_length=100)
-    amount = models.FloatField()
+    name= models.ForeignKey(User, on_delete=models.CASCADE,  blank=True, null=True)
+    amount = models.FloatField(blank=True, null=True)
     date = models.DateField(auto_now=True)
     
-    def __str__(self):
-        return self.name
+    # def __str__(self):
+    #     return self.name
+    
 class Expenses(models.Model):
     purposes = (
         ('Domain Registration','Domain Registration'),

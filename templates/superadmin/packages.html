@@ -1,14 +1,14 @@
 {% extends 'superadmin/base.html' %}
-{% block title %}Renewal {% endblock title %} 
+{% block title %}Packages {% endblock title %} 
 {% load crispy_forms_tags %}
 {% block content %}
 <br>
 
-  {% if renewal %}
+  {% if packages %}
   <div class="card mb-4 ml-4 mr-4">
     <div class="card-header">
         <i class="fas fa-table me-1"></i>
-        Renewal
+        Packages
        
     </div>
     <div class="card-body">
@@ -16,26 +16,27 @@
             <thead>
                 <tr>
                   <th scope="col">ID</th>
-                  <th scope="col">Date</th>
                   <th scope="col">Name</th>
-                  <th scope="col">Amount</th>
+                  <th scope="col">Duration</th>
+                  <th scope="col">Price</th>
                 </tr>
             </thead>
             <tfoot>
                 <tr>
                   <th scope="col">ID</th>
-                  <th scope="col">Date</th>
                   <th scope="col">Name</th>
-                  <th scope="col">Amount</th>
+                  <th scope="col">Duration</th>
+                  <th scope="col">Price</th>
                 </tr>
             </tfoot>
             <tbody>
-              {% for renew in renewal  %}
+              {% for plan in packages  %}
               <tr>
-                <th scope="row">{{renew.id}}</th>
-                <td>{{renew.date}}</td>
-                <td>{{renew.name}}</td>
-                <td>{{renew.amount}}</td>
+                <th scope="row">{{plan.id}}</th>
+
+                <td>{{plan.package_name}}</td>
+                <td>{{plan.duration}} month(s)</td>
+                <td>{{plan.price}}</td>
               </tr>
               {% endfor %}
             </tbody>
@@ -47,7 +48,7 @@
 
   <div class="container">
     <div class="row">
-      <div class="col-md-3  ml-3"><button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Renewal Entry</button></div>
+      <div class="col-md-3  ml-3"><button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Create Packages</button></div>
     </div>
   </div>
   
@@ -63,20 +64,25 @@
             <form method="POST">
               {% csrf_token %}
               <div class="row">
-                  <div class="col-md-12">{{form.name|as_crispy_field}} </div>
+                  <div class="col-md-12">{{form.package_name|as_crispy_field}} </div>
                   
                  
               </div>
               <div class="row">
                 
-                <div class="col-md-12">{{form.amount|as_crispy_field}}</div>
+                <div class="col-md-12">{{form.duration|as_crispy_field}}</div>
                
-            </div>
+              </div>
+              <div class="row">
+                
+                <div class="col-md-12">{{form.price|as_crispy_field}}</div>
+               
+              </div>
             
 
               <div class="row">
                   <div class="col-md-4"></div>
-                  <div class="col-md-4"><button type="submit" class="btn btn-success btn-block btn-lg">Save</button> </div>
+                  <div class="col-md-4"><button type="submit" class="btn btn-success btn-block btn-lg">Save Package</button> </div>
                   
               </div>
 
