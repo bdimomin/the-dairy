@@ -14,6 +14,7 @@ from django.db.models import Sum
 import itertools
 from datetime import date
 from django.db.models import Q
+from datetime import datetime
 
 from cases.forms import *
 from users.forms import *
@@ -37,13 +38,15 @@ def index(request):
 
 @user_passes_test(superadmin, login_url="/login/")
 def home(request):
+    today = date.today()
+    last_day =date.today() + timedelta(days=30) 
     all_clients = User.objects.filter(is_superadmin=0).count()
     # running_cases = Case.objects.filter(user=user, status='Running').count()
     new_clients = User.objects.filter(is_superadmin=0,date_joined=date.today()).count()
     active_clients = User.objects.filter(is_superadmin=0,is_active=1).count()
     inactive_clients = User.objects.filter(is_superadmin=0,status="Inactive").count()
     terminated_clients = User.objects.filter(is_superadmin=0,status="Terminate").count()
-    # decided_cases = Case.objects.filter(user=user, status='Decided').count()
+    upcoming_renewal = User.objects.filter(is_superadmin=0, renewal_date__range=(today,last_day)).count()
     # abandoned_cases = Case.objects.filter(user=user, status='Abandoned').count()
 
     context = {
@@ -52,6 +55,7 @@ def home(request):
         'active_clients': active_clients,
         'inactive_clients':inactive_clients,
         'terminated_clients':terminated_clients,
+        'upcoming_renewal':upcoming_renewal,
     }
     return render(request,'superadmin/home.html',context)
 
@@ -75,6 +79,7 @@ def dashboard(request):
         'not_updated_cases': not_updated_cases,
         'decided_cases': decided_cases,
         'abandoned_cases': abandoned_cases,
+        
     }
     return render(request, 'dashboard/index.html', context)
 
@@ -165,12 +170,13 @@ def all_clients(request):
     clients = User.objects.filter(is_superadmin=0)
     update = StatusUpdateForm()
     no_of_clients=[]
-    reg_date =[]
+    renewal_dates =[]
     for client in clients:
         abc = Client.objects.filter(user=client.id).count()
         no_of_clients.append(abc)
-        
-    xyz = itertools.zip_longest(clients, no_of_clients)
+        dates = Renewal.objects.filter(name_id=client)
+        renewal_dates.append(dates)
+    xyz = itertools.zip_longest(clients, no_of_clients, renewal_dates)
     
     if request.method == 'POST':
         client_id = request.POST.get('client_id')
@@ -204,17 +210,36 @@ def registry(request):
 
 @user_passes_test(superadmin, login_url="/login/")
 def renewal(request):
+    
     if request.method == 'POST':
         name= request.POST.get('name')
         amount = request.POST.get('amount')
+        
+        one = request.POST.get('days')
+        next_renew = date.today() + timedelta(days=int(one))
         users = User.objects.get(id=name)
-        Renewal.objects.create(name=users, amount=amount).save()
+        
+        users.renewal_date= next_renew
+        users.save()
+        
+        
+        Renewal.objects.create(name=users, amount=amount, days=next_renew).save()
         return redirect('renewal')
     else:
+        today = date.today()
+        last_day =date.today() + timedelta(days=30) 
         form = RenewalForm(user=request.user)
         renewal = Renewal.objects.all()
-    return render(request, 'superadmin/renewal.html', {'form':form,'renewal':renewal})
+        
+        upcoming_renewal = User.objects.filter(is_superadmin=0, renewal_date__range=(today,last_day))
+                                               
+    return render(request, 'superadmin/renewal.html', {'form':form,'renewal':renewal,'upcoming_renewal':upcoming_renewal})
 
+
+
+
+
+    
 @user_passes_test(superadmin, login_url="/login/")
 def expenses(request):
     context={}

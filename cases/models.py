@@ -29,7 +29,7 @@ class PoliceStation(models.Model):
         return f"{self.station}"
 
 class Client(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE,blank=True, null=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE,related_name="users",blank=True, null=True)
     name = models.CharField(max_length=100, blank=True, null=True)
     branch = models.CharField(max_length=100, blank=True, null=True)
     chamber_file_number = models.PositiveIntegerField(blank=True, null=True)

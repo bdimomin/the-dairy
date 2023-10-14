@@ -41,7 +41,7 @@
                     </tr>
                 </tfoot>
                 <tbody>
-                  {% for clients, no_of_clients in xyz %}
+                  {% for clients, no_of_clients, renewal_dates in xyz %}
                   <tr>
                             <td>{{clients.id}}</td>
                             <td>{{ clients.name }}</td>
@@ -52,7 +52,7 @@
 
                             <td>{{clients.created_date|date:"d F Y" }}</td>
 
-                            <td></td>
+                            <td>{{ clients.renewal_date }}</td>
                            
                             <td>{{no_of_clients}}</td>
 
