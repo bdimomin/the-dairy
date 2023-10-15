@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from tinymce.models import HTMLField
 
 
 class UserManager(BaseUserManager):
@@ -149,4 +150,25 @@ class SMSBundle(models.Model):
     
     def __str__(self):
         return self.name
+
+
+class Homepage(models.Model):
+    title = models.CharField(max_length=255, blank=True, null= True)
+    content = HTMLField()
+    
+    def __str__(self):
+        return self.title
+class Aboutpage(models.Model):
+    title = models.CharField(max_length=255, blank=True, null= True)
+    content = HTMLField()
+    
+    def __str__(self):
+        return self.title
+    
+class Pricingpage(models.Model):
+    title = models.CharField(max_length=255, blank=True, null= True)
+    content = HTMLField()
+    
+    def __str__(self):
+        return self.title
     

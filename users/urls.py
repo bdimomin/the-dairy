@@ -2,7 +2,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('',views.index,name='index'),
+    path('index/',views.index,name='index'),
     path('registration/',views.registration, name="registration"),
     path('home/',views.dashboard,name='dashboard'),
     path('login/',views.login_view,name='login_user'),
@@ -22,5 +22,17 @@ urlpatterns = [
     path('useradmin/balance-statement/', views.balancestatements, name="superadminBalanceStatement"),
     path('useradmin/sms-bundle/', views.smsbundle, name="smsbundle"),
     
+    
+    path('useradmin/homepage/', views.homepage, name="homepage"),
+    path('useradmin/homepage/<int:pk>/', views.homepageupdate, name="homepageupdate"),
+    path('useradmin/home-delete/<int:pk>/', views.homedelete, name="homedelete"),
+    
+    path('useradmin/about/', views.aboutpage, name="aboutpage"),
+    path('useradmin/about/<int:pk>/', views.aboutpageupdate, name="aboutpageupdate"),
+    path('useradmin/about-delete/<int:pk>/', views.aboutdelete, name="aboutdelete"),
+    
+    path('useradmin/pricing/', views.pricingpage, name="pricingpage"),
+    path('useradmin/pricing/<int:pk>/', views.pricingupdate, name="pricingupdate"),
+    path('useradmin/pricing-delete/<int:pk>/', views.pricingdelete, name="pricingdelete"),
     
 ]

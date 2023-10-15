@@ -3,6 +3,8 @@ from .models import *
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import UserCreationForm
 
+from ckeditor.widgets import CKEditorWidget
+
 
 class CustomUserForm(UserCreationForm):
 
@@ -94,5 +96,7 @@ class StatusUpdateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(StatusUpdateForm, self).__init__(*args, **kwargs)
         self.fields['status'].label = False
+        
+
         
         

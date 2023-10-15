@@ -316,3 +316,104 @@ def smsbundle(request):
 
 
 
+@user_passes_test(superadmin, login_url="/login/")
+def homepage(request):
+    if request.method =='POST':
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        Homepage.objects.create(title=title, content=content).save()
+        return redirect("homepage")
+    else:
+        homepage = Homepage.objects.all().order_by('-id')
+    return render(request, 'superadmin/homepage.html',{'homepage':homepage})
+
+
+@user_passes_test(superadmin, login_url="/login/")
+def homepageupdate(request,pk):
+    if request.method =='POST':
+        homepage = Homepage.objects.get(id=pk)
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        homepage.title = title
+        homepage.content = content
+        homepage.save()
+        return redirect("homepage")
+    else:
+        homepage = Homepage.objects.get(id=pk)
+    return render(request, 'superadmin/homepageupdate.html',{'homepage':homepage})
+
+@user_passes_test(superadmin, login_url="/login/")
+def homedelete(request,pk):
+    homepage = Homepage.objects.get(id=pk)
+    homepage.delete()
+    return redirect("homepage")
+
+
+@user_passes_test(superadmin, login_url="/login/")
+def aboutpage(request):
+    if request.method =='POST':
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        Aboutpage.objects.create(title=title, content=content).save()
+        return redirect("aboutpage")
+    else:
+        about = Aboutpage.objects.all().order_by('-id')
+    return render(request, 'superadmin/about.html',{'about':about})
+
+
+@user_passes_test(superadmin, login_url="/login/")
+def aboutpageupdate(request,pk):
+    if request.method =='POST':
+        aboutpage = Aboutpage.objects.get(id=pk)
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        aboutpage.title = title
+        aboutpage.content = content
+        aboutpage.save()
+        return redirect("aboutpage")
+    else:
+        aboutpage = Aboutpage.objects.get(id=pk)
+    return render(request, 'superadmin/aboutpageupdate.html',{'aboutpage':aboutpage})
+
+@user_passes_test(superadmin, login_url="/login/")
+def aboutdelete(request,pk):
+    aboutpage = Aboutpage.objects.get(id=pk)
+    aboutpage.delete()
+    return redirect("aboutpage")
+
+
+
+@user_passes_test(superadmin, login_url="/login/")
+def pricingpage(request):
+    if request.method =='POST':
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        Pricingpage.objects.create(title=title, content=content).save()
+        return redirect('pricingpage')
+    else:
+        pricing = Pricingpage.objects.all().order_by('-id')
+    return render(request, 'superadmin/pricing.html',{'pricing':pricing})
+
+@user_passes_test(superadmin, login_url="/login/")
+def pricingupdate(request,pk):
+    if request.method =='POST':
+        pricing = Pricingpage.objects.get(id=pk)
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        pricing.title = title
+        pricing.content = content
+        pricing.save()
+        return redirect("pricingpage")
+    else:
+        pricing = Pricingpage.objects.get(id=pk)
+    return render(request, 'superadmin/pricingupdate.html',{'pricing':pricing})
+
+@user_passes_test(superadmin, login_url="/login/")
+def pricingdelete(request,pk):
+    pricing = Pricingpage.objects.get(id=pk)
+    pricing.delete()
+    return redirect("pricingpage")
+
+
+
+
