@@ -43,6 +43,31 @@
                         
               </tr>
               {% endfor %}
+              
+              {% for registration,acc_expense in account %}
+              <tr>
+                        <td class="text-center">{{ registration.date }}</td>
+                        <td class="text-center">{{ registration.name }}</td>
+                        <td class="text-center">{{ registration.amount }}</td>
+
+                        <td class="text-center">{{ acc_expense.date }}</td>
+                        <td class="text-center">{{ acc_expense.purpose }}</td>
+                        <td class="text-center">{{ acc_expense.amount }}</td>
+
+                        
+              </tr>
+              {% endfor %}
+
+              {% for ren in renewal %}
+              <tr>
+                        <td class="text-center">{{ ren.date }}</td>
+                        <td class="text-center">{{ ren.name }}</td>
+                        <td class="text-center">{{ ren.amount }}</td>
+
+                        
+              </tr>
+              {% endfor %}
+
 
                 <tr>
                   <th colspan="5" class="text-right">Net Balance</th>
@@ -56,6 +81,8 @@
   </div>
 </div>
 </div>
+
+
 {% endblock %}
 
 

@@ -15,7 +15,7 @@
         Income Statements
     </div>
     <div class="card-body">
-        <table id="datatablesSimple">
+        <table id="incomestatement">
             <thead>
                 <tr>
                   <th>Date</th>
@@ -40,6 +40,28 @@
                         <td>{{ incomeamount.client }}</td>
                         <td>{{ incomeamount.purpose }}</td>
                         <td>{{ incomeamount.amount }}</td>
+                        
+              </tr>
+              {% endfor %}
+
+              {% for reg in account_registration %}
+              <tr>
+        
+                        <td>{{ reg.date }}</td>
+                        <td>{{ reg.name }}</td>
+                        <td>Registration</td>
+                        <td>{{ reg.amount }}</td>
+                        
+              </tr>
+              {% endfor %}
+
+              {% for ren in account_renewal %}
+              <tr>
+        
+                        <td>{{ ren.date }}</td>
+                        <td>{{ ren.name }}</td>
+                        <td>Renewal</td>
+                        <td>{{ ren.amount }}</td>
                         
               </tr>
               {% endfor %}

@@ -94,7 +94,7 @@ class Registration(models.Model):
     name= models.CharField(max_length=100)
     mobile= models.CharField(max_length=15,unique=True)
     email= models.EmailField(max_length=100,unique=True)
-    amount = models.FloatField()
+    amount = models.DecimalField(max_digits=19, decimal_places=2,blank=True, null=True)
     date = models.DateField(auto_now=True)
     
     def __str__(self):
@@ -103,7 +103,7 @@ class Registration(models.Model):
     
 class Renewal(models.Model):
     name= models.ForeignKey(User, on_delete=models.CASCADE, related_name="renewal", blank=True, null=True)
-    amount = models.DecimalField(max_digits=19, decimal_places=2, blank=True, null=True)
+    amount = models.DecimalField(max_digits=19, decimal_places=2,blank=True, null=True)
     date = models.DateField(auto_now=True)
     days = models.DateField(blank=True, null=True)
     
@@ -120,7 +120,7 @@ class Expenses(models.Model):
         
     )
     purpose = models.CharField(max_length=50,choices=purposes)
-    amount = models.FloatField()
+    amount = models.DecimalField(max_digits=19, decimal_places=2,blank=True, null=True)
     date = models.DateField(auto_now=True)
     
     def __str__(self):
@@ -130,7 +130,7 @@ class SuperAdminIncomeStatement(models.Model):
     client= models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True, blank=True, null=True)
     purpose = models.CharField(max_length=150,null=True,blank=True)
-    amount=models.DecimalField(max_digits=19, decimal_places=2,blank=True, null=True)
+    amount = models.DecimalField(max_digits=19, decimal_places=2,blank=True, null=True)
     
     def __str__(self):
         return self.client
@@ -138,7 +138,7 @@ class SuperAdminExpenseStatement(models.Model):
     client= models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField(auto_now_add=True, blank=True, null=True)
     purpose = models.CharField(max_length=150,null=True,blank=True)
-    amount=models.DecimalField(max_digits=19, decimal_places=2,blank=True, null=True)
+    amount = models.DecimalField(max_digits=19, decimal_places=2,blank=True, null=True)
     
     def __str__(self):
         return self.client

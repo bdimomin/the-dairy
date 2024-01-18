@@ -15,7 +15,7 @@
         Expense Statements
     </div>
     <div class="card-body">
-        <table id="datatablesSimple">
+        <table id="expensestatement">
             <thead>
                 <tr>
                   <th>Date</th>
@@ -43,6 +43,19 @@
                         
               </tr>
               {% endfor %}
+
+              {% for expense in account_expense %}
+              <tr>
+        
+                        <td>{{ expense.date }}</td>
+                        <td>Expenses</td>
+                        <td>{{ expense.purpose }}</td>
+                        <td>{{ expense.amount }}</td>
+                        
+              </tr>
+              {% endfor %}
+
+              
             </tbody>
         </table>
     </div>

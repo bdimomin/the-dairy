@@ -7,6 +7,10 @@ from ckeditor.widgets import CKEditorWidget
 
 
 class CustomUserForm(UserCreationForm):
+    def __init__(self, *args, **kwargs):
+        super(CustomUserForm, self).__init__(*args, **kwargs)
+        self.fields['password2'].label = "Password Confirmation"
+        self.fields['phone'].label = "Mobile"
 
     class Meta:
         model=User

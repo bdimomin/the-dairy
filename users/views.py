@@ -259,6 +259,9 @@ def expenses(request):
 @user_passes_test(superadmin, login_url="/login/")
 def incomestatemts(request):
     income = SuperAdminIncomeStatement.objects.all()
+    account_registration = Registration.objects.all()
+    account_renewal = Renewal.objects.all()
+    
     form = SuperAdminIncomeStatementForm(user=request.user)
     if request.method =='POST':
         client= request.POST.get('client')
@@ -269,11 +272,12 @@ def incomestatemts(request):
         
         SuperAdminIncomeStatement.objects.create(client=clients, date=date,purpose=purpose,amount=amount).save()
         
-    return render(request,'superadmin/incomestatements.html', {'form':form,'income':income})
+    return render(request,'superadmin/incomestatements.html', {'form':form,'income':income,'account_registration':account_registration,'account_renewal':account_renewal})
 
 @user_passes_test(superadmin, login_url="/login/")
 def expensestements(request):
     expense = SuperAdminExpenseStatement.objects.all()
+    account_expense = Expenses.objects.all()
     form = SuperAdminExpenseStatementForm(user=request.user)
     if request.method =='POST':
         client= request.POST.get('client')
@@ -284,7 +288,7 @@ def expensestements(request):
         
         SuperAdminExpenseStatement.objects.create(client=clients, date=date,purpose=purpose,amount=amount).save()
         
-    return render(request,'superadmin/expensestatements.html', {'form':form,'expense':expense})
+    return render(request,'superadmin/expensestatements.html', {'form':form,'expense':expense,'account_expense':account_expense})
 
 
 @user_passes_test(superadmin, login_url="/login/")
@@ -292,11 +296,28 @@ def balancestatements(request):
     try:
         income = SuperAdminIncomeStatement.objects.all()
         sumincome = SuperAdminIncomeStatement.objects.all().aggregate(sumincome=Sum('amount'))
+        
+        registration = Registration.objects.all()
+        sumreg = Registration.objects.all().aggregate(sumreg=Sum('amount'))
+        
+        renewal = Renewal.objects.all()
+        sumren = Renewal.objects.all().aggregate(sumren=Sum('amount'))
+        
         expense = SuperAdminExpenseStatement.objects.all()
         sumexpense = SuperAdminExpenseStatement.objects.all().aggregate(sumexpense=Sum('amount'))
-        netbalance= sumincome["sumincome"]-sumexpense["sumexpense"]
+        
+        acc_expense = Expenses.objects.all()
+        sum_acc_expense = Expenses.objects.all().aggregate(sum_acc_expense=Sum('amount'))
+        
+        
+        sumof = sumreg["sumreg"]+sumincome["sumincome"]+sumren["sumren"]
+        expense_of = sumexpense["sumexpense"]+sum_acc_expense["sum_acc_expense"]
+        netbalance= sumof-expense_of
+        
+        account = itertools.zip_longest(registration, acc_expense)
         balance = itertools.zip_longest(income, expense)
-        return render(request,'superadmin/balancestatements.html', {'balance':balance,'netbalance':netbalance})
+        
+        return render(request,'superadmin/balancestatements.html', {'balance':balance,'netbalance':netbalance,'account':account,'renewal':renewal})
     except:
         return HttpResponse(" Sorry! No Data Found")
     
