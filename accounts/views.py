@@ -63,7 +63,10 @@ def bill_invoices(request):
 
         user = User.objects.get(id=user)
         client = Client.objects.get(id=client)
-        BillInvoices.objects.create(user=user,client=client, address=address, subjects=subjects,description=description, amount=amount, vat=vat).save()
+        if vat:
+            BillInvoices.objects.create(user=user,client=client, address=address, subjects=subjects,description=description, amount=amount, vat=vat).save()
+        else:
+            BillInvoices.objects.create(user=user,client=client, address=address, subjects=subjects,description=description, amount=amount,vat=0).save()
 
     return render(request,'accounts/bill_invoices.html',{'bill_invoices':bill_invoices,'form':form})
 
@@ -179,6 +182,9 @@ def quotationPdf(request, *args, **kwargs):
 def incomestatemts(request):
     user = request.user.id
     income = IncomeStatements.objects.filter(user=user)
+    invoices = BillInvoices.objects.filter(user=user,is_paid=1)
+
+    
     form = IncomeStatementsForm(user=request.user)
     if request.method =='POST':
         user = request.user.id
@@ -191,7 +197,7 @@ def incomestatemts(request):
 
         IncomeStatements.objects.create(user=user,client=client, date=date,purpose=purpose,amount=amount).save()
 
-    return render(request,'accounts/incomestatements.html', {'form':form,'income':income})
+    return render(request,'accounts/incomestatements.html', {'form':form,'income':income,'invoices':invoices})
 
 @login_required(login_url="/login/")
 def expensestatements(request):
@@ -214,15 +220,39 @@ def expensestatements(request):
 @login_required(login_url="/login/")
 def balancestatements(request):
 
-    try:
-        user = request.user.id
-        income = IncomeStatements.objects.filter(user=user)
-        sumincome = IncomeStatements.objects.filter(user=user).aggregate(sumincome=Sum('amount'))
-        expense = ExpenseStatements.objects.filter(user=user)
-        sumexpense = ExpenseStatements.objects.filter(user=user).aggregate(sumexpense=Sum('amount'))
-        netbalance= sumincome["sumincome"]-sumexpense["sumexpense"]
-        balance = itertools.zip_longest(income, expense)
-        return render(request,'accounts/balancestatements.html', {'balance':balance,'netbalance':netbalance})
-    except:
-        return HttpResponse("Sorry! No Data Found!")
+   
+    user = request.user.id
+    income = IncomeStatements.objects.filter(user=user)
+    sumincome = IncomeStatements.objects.filter(user=user).aggregate(sumincome=Sum('amount'))
+    
+    bills= BillInvoices.objects.filter(user=user,is_paid=1)
+    sumbill = BillInvoices.objects.filter(user=user,is_paid=1).aggregate(sumbill=Sum('amount')+Sum('vat'))
+
+    
+    
+    expense = ExpenseStatements.objects.filter(user=user)
+    sumexpense = ExpenseStatements.objects.filter(user=user).aggregate(sumexpense=Sum('amount'))
+    
+
+    
+    if sumincome["sumincome"] and sumbill["sumbill"]:
+        sumofall = sumincome["sumincome"]+sumbill["sumbill"]
+        
+    elif sumincome["sumincome"]:
+        sumofall = sumincome["sumincome"]
+    else:
+        sumofall = sumbill["sumbill"]
+        
+        
+    if sumofall and sumexpense["sumexpense"]:
+        netbalance= sumofall-sumexpense["sumexpense"]
+    elif sumofall:
+        netbalance = sumofall
+    else:
+        netbalance = sumexpense["sumexpense"]
+        
+    balance = itertools.zip_longest(income, expense)
+    return render(request,'accounts/balancestatements.html', {'balance':balance,'netbalance':netbalance,'bills':bills})
+    
+    
 

@@ -4,7 +4,9 @@ from .models import Case, CaseType , Court, PoliceStation, Client, BulkUpload
 
 
 class CaseTypeForm(forms.ModelForm):
-    
+    def __init__(self, *args, **kwargs):
+        super(CaseTypeForm, self).__init__(*args, **kwargs)
+        self.fields['case_type'].label = "Case Type"
     class Meta:
         model = CaseType
         fields = '__all__'

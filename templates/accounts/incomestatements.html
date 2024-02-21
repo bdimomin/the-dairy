@@ -8,7 +8,7 @@
 {% block content %}
 <br>
 
-{% if income %}
+{% if income or invoices %}
 <div class="card mb-4 ml-4 mr-4">
     <div class="card-header">
         <i class="fas fa-table me-1"></i>
@@ -43,12 +43,28 @@
                         
               </tr>
               {% endfor %}
+
+              {% for invoice in invoices %}
+              <tr>
+        
+                        <td>{{ invoice.date }}</td>
+                        <td>{{ invoice.client }}</td>
+                        <td>{{ invoice.subjects }}</td>
+                       
+                        {% if  invoice.vat %}
+                        <td>{{ invoice.amount|add:invoice.vat|floatformat:2 }}</td>
+                        {% else %}
+                        <td>{{ invoice.amount }}</td>
+                        {% endif %}
+                        
+              </tr>
+              {% endfor %}
             </tbody>
         </table>
     </div>
 </div>
 {% else %}
-<h3 class="text-center alert alert-primary" role="alert">Currently, You don't have any Quotations</h3>
+<h3 class="text-center alert alert-primary" role="alert">Currently, You don't have any income statement</h3>
 {% endif %}
 
 

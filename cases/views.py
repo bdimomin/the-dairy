@@ -12,6 +12,11 @@ from .models import Case, CaseType, Court, PoliceStation, Client, DefaultDraftin
 from users.models import User
 from datetime import date, timedelta
 import pandas as pd
+from django.http import FileResponse
+from django.conf import settings
+import os
+
+
 # from reportlab.lib.pagesizes import letter
 # from reportlab.pdfgen import canvas
 
@@ -63,6 +68,14 @@ def bulk_upload_casetype(request):
         bulk_form = BulkUploadForm()
 
     return render(request, 'cases/bulk_upload_casetype.html', {'bulk_form': bulk_form})
+
+
+@login_required(login_url="/login/")
+def bulk_download_casetype(request):
+    file = os.path.join(settings.BASE_DIR,'static/files/bulk-case-type.xlsx')
+    fileOpened = open(file,'rb')
+    return FileResponse(fileOpened)
+    
 
 @login_required(login_url="/login/")
 def casetype_update(request, id):
@@ -124,6 +137,14 @@ def bulk_upload_courts(request):
 
     return render(request, 'cases/bulk_upload_courts.html', {'bulk_form': bulk_form})
 
+
+@login_required(login_url="/login/")
+def bulk_download_courts(request):
+    file = os.path.join(settings.BASE_DIR,'static/files/bulk-court.xlsx')
+    fileOpened = open(file,'rb')
+    return FileResponse(fileOpened)
+
+
 @login_required(login_url="/login/")
 def court_update(request, court_id):
     court = Court.objects.get(id=court_id)
@@ -184,6 +205,15 @@ def bulk_upload_police_stations(request):
         bulk_form = BulkUploadForm()
 
     return render(request, 'cases/bulk_upload_stations.html', {'bulk_form': bulk_form})
+
+
+@login_required(login_url="/login/")
+def bulk_download_police_station(request):
+    file = os.path.join(settings.BASE_DIR,'static/files/bulk-police-station.xlsx')
+    fileOpened = open(file,'rb')
+    return FileResponse(fileOpened)
+
+
 
 @login_required(login_url="/login/")
 def police_station_update(request, station_id):
@@ -257,6 +287,12 @@ def bulk_upload_clients(request):
 
     return render(request, 'cases/bulk_upload_clients.html', {'bulk_form': bulk_form})
 
+
+@login_required(login_url="/login/")
+def bulk_download_client(request):
+    file = os.path.join(settings.BASE_DIR,'static/files/bulk-client-add.xlsx')
+    fileOpened = open(file,'rb')
+    return FileResponse(fileOpened)
 
 
 @login_required(login_url="/login/")

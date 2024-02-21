@@ -44,6 +44,20 @@
               </tr>
               {% endfor %}
 
+              {% for bill in bills %}
+              <tr>
+                        <td class="text-center">{{ bill.date }}</td>
+                        <td class="text-center">{{ bill.client }}</td>
+                        {% if  bill.vat %}
+                        <td  class="text-center">{{ bill.amount|add:bill.vat|floatformat:2 }}</td>
+                        {% else %}
+                        <td  class="text-center">{{ bill.amount }}</td>
+                        {% endif %}
+                       
+                        
+              </tr>
+              {% endfor %}
+
                 <tr>
                   <th colspan="5" class="text-right">Net Balance</th>
                   <td class="text-center">{{ netbalance }}</td>

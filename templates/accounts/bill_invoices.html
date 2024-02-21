@@ -36,8 +36,8 @@
                         <td><a href="{% url 'oneBillInvoice' bill_invoice.id %}">{{ bill_invoice.date }}</a></td>
                         <td><a href="{% url 'oneBillInvoice' bill_invoice.id %}">{{ bill_invoice.client }}</a></td>
                         <td><a href="{% url 'oneBillInvoice' bill_invoice.id %}">{{ bill_invoice.subjects }}</a></td>
-                        {% if  bill_invoice.vat%}
-                        <td><a href="{% url 'oneBillInvoice' bill_invoice.id %}">{{ bill_invoice.amount|add:bill_invoice.vat }}</a></td>
+                        {% if  bill_invoice.vat %}
+                        <td><a href="{% url 'oneBillInvoice' bill_invoice.id %}">{{ bill_invoice.amount|add:bill_invoice.vat|floatformat:2 }}</a></td>
                         {% else %}
                         <td><a href="{% url 'oneBillInvoice' bill_invoice.id %}">{{ bill_invoice.amount }}</a></td>
                         {% endif %}

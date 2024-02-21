@@ -9,22 +9,27 @@ urlpatterns = [
     path('case-type/',views.casetype_setup, name='case-type'),
     path('case-type/<int:id>/',views.casetype_update, name='edit-case-type'),
     path('casetype-bulk-upload/', views.bulk_upload_casetype, name='bulk_upload_casetype'),
+    path('bulk-casetype-download/',views.bulk_download_casetype, name='bulk_download_casetype'),
+
 
     # <---------- Courts Section ------------->
     path('courts/',views.court_setup, name='courts'),
     path('courts/<int:court_id>/',views.court_update, name='edit-court'),
     path('courts-bulk-upload/', views.bulk_upload_courts, name='bulk_upload_courts'),
+    path('bulk-courts-download/',views.bulk_download_courts, name='bulk_download_courts'),
 
     # <---------- Stations Section ------------->
     path('stations/',views.police_station_setup, name='stations'),
     path('stations/<int:station_id>/',views.police_station_update, name='edit-stations'),
     path('stations-bulk-upload/', views.bulk_upload_police_stations, name='bulk_upload_stations'),
+    path('bulk-police-station-download/',views.bulk_download_police_station, name='bulk_download_police_station'),
 
     # <---------- Client Section ------------->
     path('add-client/',views.addClient, name='add-client'),
     path('update-client/<int:client_id>',views.client_update, name='update-client'),
     path('all-client/',views.getAllClients, name='all-client'),
     path('client-bulk-upload/', views.bulk_upload_clients, name='bulk_upload_clients'),
+    path('bulk-client-download/',views.bulk_download_client, name='bulk_download_client'),
 
     path('create-case/',views.createCase, name='create-case'),
     path('all-cases/',views.getAllCases,name='all-cases'),

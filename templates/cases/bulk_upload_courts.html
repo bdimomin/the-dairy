@@ -8,6 +8,11 @@
             <div class="card shadow">
                 <div class="card-body">
                     <h3 class="text-center alert alert-primary" role="alert">Bulk Upload Courts</h3>
+
+                    <div class="col-md-5 offset-md-7">
+                        <a href=" {% url "bulk_download_courts" %}" class="btn btn-warning"> <i class="fa-solid fa-download"></i> Download Bulk Courts Sample File</a>
+                    </div>
+
                     <form method="post" enctype="multipart/form-data">
                         {% csrf_token %}
                         {{ bulk_form.file | as_crispy_field }}

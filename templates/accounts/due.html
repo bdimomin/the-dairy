@@ -40,7 +40,7 @@
                         <td>{{ due_bill.client }}</td>
                         <td>{{ due_bill.subjects }}</td>
                         {% if  due_bill.vat%}
-                        <td>{{ due_bill.amount|add:due_bill.vat }}</td>
+                        <td>{{ due_bill.amount|add:due_bill.vat|floatformat:2 }}</td>
                         {% else %}
                         <td>{{ due_bill.amount }}</td>
                         {% endif %}
